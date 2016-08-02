@@ -9,6 +9,7 @@ import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.jon.gille.dropwizard.monitoring.health.domain.*;
 import org.jon.gille.dropwizard.monitoring.health.resource.HealthCheckResource;
+import org.jon.gille.dropwizard.monitoring.metadata.resource.ServiceMetadataResource;
 
 public class DropwizardMonitoringBundle<C> implements ConfiguredBundle<C> {
 
@@ -44,7 +45,9 @@ public class DropwizardMonitoringBundle<C> implements ConfiguredBundle<C> {
         DropwizardResourceConfig resourceConfig = new DropwizardResourceConfig(environment.metrics());
         JerseyContainerHolder jerseyContainerHolder = new JerseyContainerHolder(new ServletContainer(resourceConfig));
         resourceConfig.register(new HealthCheckResource(healthCheckService));
+        resourceConfig.register(new ServiceMetadataResource());
         environment.admin().addServlet("health check resources", jerseyContainerHolder.getContainer())
                 .addMapping(resourcePath);
     }
+
 }
