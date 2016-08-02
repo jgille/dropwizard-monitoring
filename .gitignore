@@ -1,0 +1,17 @@
+.DS_Store
+.idea
+*.iml
+*.ipr
+*.iws
+target
+*~
+*#
+.classpath
+.project
+.settings
+*/dependency-reduced-pom.xml
+report.xml
+*.log
+*.log.gz
+*.log.json
+/log

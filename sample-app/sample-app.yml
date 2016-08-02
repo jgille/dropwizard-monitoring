@@ -1,0 +1,8 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: 8066
+
+  adminConnectors:
+    - type: http
+      port: 9066
