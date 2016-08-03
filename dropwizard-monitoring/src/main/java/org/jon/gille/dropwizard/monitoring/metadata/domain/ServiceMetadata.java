@@ -7,7 +7,6 @@ public class ServiceMetadata {
     private final ServiceVersion serviceVersion;
     private final InstanceMetadata instanceMetadata;
 
-
     public ServiceMetadata(Builder builder) {
         this.serviceId = new ServiceId(builder.serviceId);
         this.serviceName = new ServiceName(builder.serviceName);
