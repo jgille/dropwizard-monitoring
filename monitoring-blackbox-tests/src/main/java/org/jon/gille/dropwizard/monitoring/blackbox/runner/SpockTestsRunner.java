@@ -1,6 +1,7 @@
 package org.jon.gille.dropwizard.monitoring.blackbox.runner;
 
 import org.jon.gille.dropwizard.monitoring.blackbox.spec.health.HealthCheckSpec;
+import org.jon.gille.dropwizard.monitoring.blackbox.spec.metadata.MetadataSpec;
 import org.junit.runner.Computer;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -31,6 +32,9 @@ public class SpockTestsRunner {
     private static Class<?>[] getSuite() {
         // TODO: We could be using reflection here to find all Specifications
 
-        return new Class[] {HealthCheckSpec.class };
+        return new Class[] {
+                HealthCheckSpec.class,
+                MetadataSpec.class
+        };
     }
 }

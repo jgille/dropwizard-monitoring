@@ -11,26 +11,48 @@ class HealthCheckSpec extends Specification {
 
     def setupSpec() {
         client = new RESTClient('http://monitored-service:9066')
-        client.handler.success = { resp, json ->
-            [response: resp, body: json]
-        }
-        client.handler.failure = client.handler.success
     }
 
-    def "The health check endpoint returns the expected result"() {
+    @SuppressWarnings(["GrUnresolvedAccess", "GrEqualsBetweenInconvertibleTypes"])
+    def "The health check endpoint returns the expected response"() {
         when:
         def health = checkHealth()
 
+        def healthy = health.healthy as List
+        def unhealthy = health.unhealthy as List
+
         then:
-        health.healthy.size == 2
+        healthy.size == 2
 
         and:
-        health.unhealthy.size == 1
+        healthy[0] == [
+                name: 'annotated',
+                status: 'HEALTHY',
+                type: 'EXTERNAL_DEPENDENCY',
+                message: 'Search succeeded',
+                dependent_on: 'google'
+        ]
+
+        and:
+        healthy[1] == [
+                name: 'deadlocks',
+                status: 'HEALTHY',
+                type: 'SELF'
+        ]
+
+        and:
+        unhealthy == [
+                [
+                        name: 'broken',
+                        status: 'CRITICAL',
+                        type: 'SELF',
+                        message: 'Fail!',
+                        description: 'I will always fail'
+                ]
+        ]
     }
 
     def checkHealth() {
-        def res = client.get(path: '/service/healthcheck')
-        assert res.response.status == 200
-        res.body
+        client.get( path: '/service/healthcheck' ).data
     }
 }
