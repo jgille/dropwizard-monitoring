@@ -1,6 +1,7 @@
 package org.jon.gille.dropwizard.monitoring.health.domain;
 
 import com.codahale.metrics.health.HealthCheck;
+import org.jon.gille.dropwizard.monitoring.ValueObject;
 
 import java.util.Optional;
 

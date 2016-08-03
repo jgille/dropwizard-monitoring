@@ -1,5 +1,7 @@
 package org.jon.gille.dropwizard.monitoring.health.domain;
 
+import org.jon.gille.dropwizard.monitoring.ValueObject;
+
 import java.util.Optional;
 
 public class HealthCheckSettings extends ValueObject {

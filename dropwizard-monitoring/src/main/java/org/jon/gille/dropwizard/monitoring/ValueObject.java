@@ -1,4 +1,4 @@
-package org.jon.gille.dropwizard.monitoring.health.domain;
+package org.jon.gille.dropwizard.monitoring;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

@@ -4,6 +4,7 @@ import org.jon.gille.dropwizard.monitoring.api.health.HealthCheckResultDto;
 import org.jon.gille.dropwizard.monitoring.api.health.ServiceInstanceHealthDto;
 import org.jon.gille.dropwizard.monitoring.health.domain.HealthCheckResult;
 import org.jon.gille.dropwizard.monitoring.health.domain.HealthCheckService;
+import org.jon.gille.dropwizard.monitoring.health.translation.api.HealthCheckResultTranslator;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -36,18 +37,7 @@ public class HealthCheckResource {
     }
 
     private List<HealthCheckResultDto> mapToDtos(Stream<HealthCheckResult> checks) {
-        return checks.map(this::mapToDto).collect(toList());
-    }
-
-    private HealthCheckResultDto mapToDto(HealthCheckResult healthCheckResult) {
-        return new HealthCheckResultDto(
-                healthCheckResult.name(),
-                healthCheckResult.status().name(),
-                healthCheckResult.description().orElse(null),
-                healthCheckResult.message().orElse(null),
-                healthCheckResult.type().name(),
-                healthCheckResult.dependentOn().orElse(null),
-                healthCheckResult.link().orElse(null));
+        return checks.map(HealthCheckResultTranslator::mapToDto).collect(toList());
     }
 
 }

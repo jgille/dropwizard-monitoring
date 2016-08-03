@@ -31,6 +31,11 @@ public class SampleApp extends Application<Configuration> {
                         .build());
     }
 
+    @Override
+    public String getName() {
+        return "Sample App";
+    }
+
     public static void main(String[] args) throws Exception {
         new SampleApp().run(args);
     }
