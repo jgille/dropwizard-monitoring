@@ -47,6 +47,7 @@ class HealthCheckSpec extends Specification {
                         status: 'CRITICAL',
                         type: 'SELF',
                         message: 'Fail!',
+                        error: 'java.lang.RuntimeException: Fail!',
                         description: 'I will always fail'
                 ]
         ]

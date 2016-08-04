@@ -18,6 +18,8 @@ public class HealthCheckResultDto extends Dto {
 
     public final String message;
 
+    public final String error;
+
     public final String type;
 
     public final String dependent_on;
@@ -28,6 +30,7 @@ public class HealthCheckResultDto extends Dto {
                                 @JsonProperty("status") String status,
                                 @JsonProperty("description") String description,
                                 @JsonProperty("message") String message,
+                                @JsonProperty("error") String error,
                                 @JsonProperty("type") String type,
                                 @JsonProperty("dependent_on") String dependentOn,
                                 @JsonProperty("link") String link) {
@@ -35,6 +38,7 @@ public class HealthCheckResultDto extends Dto {
         this.status = status;
         this.description = description;
         this.message = message;
+        this.error = error;
         this.type = type;
         this.dependent_on = dependentOn;
         this.link = link;

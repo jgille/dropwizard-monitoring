@@ -8,6 +8,6 @@ import org.jon.gille.dropwizard.monitoring.health.domain.Type;
 public class UnhealthyHealthCheck extends HealthCheck {
     @Override
     protected Result check() throws Exception {
-        return Result.unhealthy("Fail!");
+        throw new RuntimeException("Fail!");
     }
 }
