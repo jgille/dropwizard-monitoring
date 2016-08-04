@@ -1,1 +1,2 @@
 org.jon.gille.dropwizard.monitoring.health.reporting.ConsoleHealthReporterFactory
+org.jon.gille.dropwizard.monitoring.health.reporting.http.HttpPostHealthReporterFactory

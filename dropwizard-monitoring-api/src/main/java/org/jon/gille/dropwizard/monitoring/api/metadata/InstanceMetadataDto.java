@@ -1,8 +1,9 @@
 package org.jon.gille.dropwizard.monitoring.api.metadata;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jon.gille.dropwizard.monitoring.api.Dto;
 
-public class InstanceMetadataDto {
+public class InstanceMetadataDto extends Dto {
 
     public final String instance_id;
     public final String host_address;

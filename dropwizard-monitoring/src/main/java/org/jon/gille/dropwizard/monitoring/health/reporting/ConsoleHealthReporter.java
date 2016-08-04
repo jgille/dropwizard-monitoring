@@ -10,7 +10,7 @@ class ConsoleHealthReporter implements ServiceHealthReporter {
 
     private final PrintStream out;
 
-    public ConsoleHealthReporter() {
+    ConsoleHealthReporter() {
         this(System.out);
     }
 
@@ -20,6 +20,7 @@ class ConsoleHealthReporter implements ServiceHealthReporter {
 
     @Override
     public void report(ServiceHealth serviceHealth) {
+
         List<HealthCheckResult> healthyChecks = serviceHealth.healthyChecks();
         List<HealthCheckResult> unhealthyChecks = serviceHealth.unhealthyChecks();
 

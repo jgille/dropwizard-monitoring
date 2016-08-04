@@ -6,6 +6,7 @@ import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.jersey.DropwizardResourceConfig;
 import io.dropwizard.jersey.setup.JerseyContainerHolder;
+import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.util.Duration;
@@ -15,6 +16,7 @@ import org.jon.gille.dropwizard.monitoring.config.HealthConfiguration;
 import org.jon.gille.dropwizard.monitoring.health.domain.*;
 import org.jon.gille.dropwizard.monitoring.health.reporting.HealthReporterFactory;
 import org.jon.gille.dropwizard.monitoring.health.reporting.ScheduledServiceHealthReporter;
+import org.jon.gille.dropwizard.monitoring.health.reporting.ServiceHealthReporter;
 import org.jon.gille.dropwizard.monitoring.health.resource.HealthCheckResource;
 import org.jon.gille.dropwizard.monitoring.metadata.domain.InstanceMetadataProvider;
 import org.jon.gille.dropwizard.monitoring.metadata.domain.LocalHostInstanceMetadataProvider;
@@ -70,15 +72,19 @@ public class DropwizardMonitoringBundle<C extends DropwizardMonitoringConfigurat
         HealthConfiguration health = configuration.getHealth();
         ImmutableList<HealthReporterFactory> reporters = health.getReporters();
 
-        reporters.forEach(reporter -> {
-            Duration frequency = reporter.getFrequency().orElse(health.getDefaultReportingFrequency());
+        reporters.forEach(reporterFactory -> {
+            Duration frequency = reporterFactory.getFrequency().orElse(health.getDefaultReportingFrequency());
             ScheduledExecutorService scheduler =
-                    environment.lifecycle().scheduledExecutorService(reporter.getName())
+                    environment.lifecycle().scheduledExecutorService(reporterFactory.getName())
                     .threads(1).build();
+            ServiceHealthReporter reporter = reporterFactory.build();
             ScheduledServiceHealthReporter scheduledReporter =
                     new ScheduledServiceHealthReporter(serviceMetadata, healthCheckService, scheduler,
-                            frequency, reporter.build());
+                            frequency, reporter);
             environment.lifecycle().manage(scheduledReporter);
+            if (reporter instanceof Managed) {
+                environment.lifecycle().manage((Managed) reporter);
+            }
         });
     }
 

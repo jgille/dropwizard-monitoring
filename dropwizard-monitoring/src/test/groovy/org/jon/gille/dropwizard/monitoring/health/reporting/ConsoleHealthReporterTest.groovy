@@ -25,8 +25,9 @@ class ConsoleHealthReporterTest extends Specification {
                         HealthCheck.Result.healthy("it worked"))
         ]
         def timestamp = Instant.now()
-        def serviceHealth = new ServiceHealth(serviceMetadata, executedChecks, timestamp)
+        def id = UUID.randomUUID()
 
+        def serviceHealth = new ServiceHealth(id, serviceMetadata, executedChecks, timestamp)
 
         when:
         reporter.report(serviceHealth)
@@ -56,8 +57,9 @@ class ConsoleHealthReporterTest extends Specification {
                         HealthCheck.Result.unhealthy("it didn't work"))
         ]
         def timestamp = Instant.now()
-        def serviceHealth = new ServiceHealth(serviceMetadata, executedChecks, timestamp)
+        def id = UUID.randomUUID()
 
+        def serviceHealth = new ServiceHealth(id, serviceMetadata, executedChecks, timestamp)
 
         when:
         reporter.report(serviceHealth)

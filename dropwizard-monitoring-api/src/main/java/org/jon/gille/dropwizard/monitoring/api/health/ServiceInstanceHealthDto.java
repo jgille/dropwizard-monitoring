@@ -1,10 +1,11 @@
 package org.jon.gille.dropwizard.monitoring.api.health;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jon.gille.dropwizard.monitoring.api.Dto;
 
 import java.util.List;
 
-public class ServiceInstanceHealthDto {
+public class ServiceInstanceHealthDto extends Dto {
 
     public final List<HealthCheckResultDto> unhealthy;
 

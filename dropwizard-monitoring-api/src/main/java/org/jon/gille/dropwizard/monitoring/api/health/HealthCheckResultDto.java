@@ -2,12 +2,13 @@ package org.jon.gille.dropwizard.monitoring.api.health;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jon.gille.dropwizard.monitoring.api.Dto;
 
 import java.util.List;
 import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class HealthCheckResultDto {
+public class HealthCheckResultDto extends Dto {
 
     public final String name;
 

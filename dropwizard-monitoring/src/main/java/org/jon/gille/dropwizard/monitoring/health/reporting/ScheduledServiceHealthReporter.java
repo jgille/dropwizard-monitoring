@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -41,7 +42,8 @@ public class ScheduledServiceHealthReporter implements Managed {
     private void reportSafely() {
         try {
             List<HealthCheckResult> executedChecks = healthCheckService.runHealthChecks();
-            ServiceHealth serviceHealth = new ServiceHealth(serviceMetadata, executedChecks, Instant.now());
+            ServiceHealth serviceHealth =
+                    new ServiceHealth(UUID.randomUUID(), serviceMetadata, executedChecks, Instant.now());
             reporter.report(serviceHealth);
         } catch (Exception e) {
             logger.warn("Failed to report service health", e);

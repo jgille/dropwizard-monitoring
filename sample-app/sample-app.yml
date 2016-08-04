@@ -11,3 +11,8 @@ health:
   reporters:
     - type: console
       frequency: 2s
+    - type: http-post
+      frequency: 5s
+      uri: http://localhost:8080/services/health
+      connectTimeout: 2s
+      readTimeout: 4s
