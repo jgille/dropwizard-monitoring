@@ -2,6 +2,7 @@ package org.jon.gille.dropwizard.monitoring.api.health;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.NotBlank;
 import org.jon.gille.dropwizard.monitoring.api.Dto;
 
 import java.util.List;
@@ -10,8 +11,10 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class HealthCheckResultDto extends Dto {
 
+    @NotBlank
     public final String name;
 
+    @NotBlank
     public final String status;
 
     public final String description;
@@ -20,6 +23,7 @@ public class HealthCheckResultDto extends Dto {
 
     public final String error;
 
+    @NotBlank
     public final String type;
 
     public final String dependent_on;

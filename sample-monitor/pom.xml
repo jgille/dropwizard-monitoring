@@ -9,19 +9,19 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sample-app</artifactId>
+    <artifactId>sample-monitor</artifactId>
+
 
     <dependencies>
         <dependency>
             <groupId>org.jon.gille.dropwizard</groupId>
-            <artifactId>dropwizard-monitoring</artifactId>
+            <artifactId>dropwizard-monitoring-api</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>1.7.21</version>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-core</artifactId>
         </dependency>
     </dependencies>
 
@@ -62,12 +62,8 @@
                                                 implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                                         <transformer
                                                 implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                            <manifestEntries>
-                                                <Service-Id>sample_app</Service-Id>
-                                                <Service-Version>${project.version}</Service-Version>
-                                            </manifestEntries>
                                             <mainClass>
-                                                org.jon.gille.dropwizard.monitoring.sample.app.SampleApp
+                                                org.jon.gille.dropwizard.monitoring.sample.monitor.SampleMonitorApp
                                             </mainClass>
                                         </transformer>
                                     </transformers>

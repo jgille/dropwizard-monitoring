@@ -14,6 +14,7 @@
         <module>dropwizard-monitoring-api</module>
         <module>sample-app</module>
         <module>monitoring-blackbox-tests</module>
+        <module>sample-monitor</module>
     </modules>
 
     <properties>

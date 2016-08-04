@@ -24,6 +24,7 @@ class ConsoleHealthReporter implements ServiceHealthReporter {
         List<HealthCheckResult> healthyChecks = serviceHealth.healthyChecks();
         List<HealthCheckResult> unhealthyChecks = serviceHealth.unhealthyChecks();
 
+        out.println();
         out.printf("--- %s Service Health ---", serviceHealth.serviceMetadata().serviceName().name());
         out.println();
         out.printf("%d unhealthy checks, %d healthy checks", unhealthyChecks.size(), healthyChecks.size());

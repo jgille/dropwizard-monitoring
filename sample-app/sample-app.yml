@@ -13,6 +13,6 @@ health:
       frequency: 2s
     - type: http-post
       frequency: 5s
-      uri: http://localhost:8080/services/health
+      uri: http://monitor:8067/monitor/services
       connectTimeout: 2s
       readTimeout: 4s

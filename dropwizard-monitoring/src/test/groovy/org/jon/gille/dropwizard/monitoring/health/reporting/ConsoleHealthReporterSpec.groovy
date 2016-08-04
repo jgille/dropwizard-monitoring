@@ -37,7 +37,8 @@ class ConsoleHealthReporterSpec extends Specification {
         def logged = bos.toString("UTF-8")
 
         logged ==
-                """--- My App Service Health ---
+                """
+--- My App Service Health ---
 0 unhealthy checks, 1 healthy checks
 
 """
@@ -69,7 +70,8 @@ class ConsoleHealthReporterSpec extends Specification {
         def logged = bos.toString("UTF-8")
 
         logged ==
-                """--- My App Service Health ---
+                """
+--- My App Service Health ---
 1 unhealthy checks, 0 healthy checks
 ------ Unhealthy checks ------
     * check - CRITICAL

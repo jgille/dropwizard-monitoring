@@ -2,12 +2,13 @@
 
 PROJECT_DIR=$PWD
 MONITORED_SERVICE=monitored-service
+MONITOR=monitor
 BLACKBOX_TESTS=monitoring-blackbox-tests
 
 start () {
     stop
     build
-    start_mock_services
+    start_services
 }
 
 run_tests () {
@@ -25,9 +26,12 @@ run_tests () {
     fi
 }
 
-start_mock_services () {
+start_services () {
     cd ${PROJECT_DIR}
-    docker run -d -p 8066:8066 -p 9066:9066 --name ${MONITORED_SERVICE} ${MONITORED_SERVICE}:${VERSION}
+    docker run -d -p 8067:8067 -p 9067:9067 --name ${MONITOR} ${MONITOR}:${VERSION}
+    docker run -d -p 8066:8066 -p 9066:9066 --name ${MONITORED_SERVICE} --link ${MONITOR}:${MONITOR} ${MONITORED_SERVICE}:${VERSION}
+
+    wait_for "localhost:9067"
     wait_for "localhost:9066"
 }
 
@@ -57,7 +61,7 @@ get () {
 
 stop() {
     # Only stop/remove what we start
-    for container_name in ${MONITORED_SERVICE}
+    for container_name in ${MONITORED_SERVICE} ${MONITOR}
     do
         ps=$(docker ps -a|grep ${container_name})
         if [ -n "$ps" ]; then
@@ -68,14 +72,15 @@ stop() {
 }
 
 build() {
-    cd $PROJECT_DIR
+    cd ${PROJECT_DIR}
     docker build -t ${MONITORED_SERVICE}:${VERSION} -f ${PROJECT_DIR}/sample-app/Dockerfile ${PROJECT_DIR}/sample-app
+    docker build -t ${MONITOR}:${VERSION} -f ${PROJECT_DIR}/sample-monitor/Dockerfile ${PROJECT_DIR}/sample-monitor
     docker build -t ${BLACKBOX_TESTS}:${VERSION} -f ${PROJECT_DIR}/monitoring-blackbox-tests/Dockerfile ${PROJECT_DIR}/monitoring-blackbox-tests
 }
 
 get_logs () {
     mkdir -p ${PROJECT_DIR}/logs
-    for container_name in ${MONITORED_SERVICE}
+    for container_name in ${MONITORED_SERVICE} ${MONITOR}
     do
         ps=$(docker ps -a|grep ${container_name})
         if [ -n "$ps" ]; then
