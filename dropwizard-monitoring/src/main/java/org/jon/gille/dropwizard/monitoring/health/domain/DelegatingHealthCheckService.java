@@ -2,7 +2,9 @@ package org.jon.gille.dropwizard.monitoring.health.domain;
 
 import com.codahale.metrics.health.HealthCheck;
 import com.codahale.metrics.health.HealthCheckRegistry;
+import org.jon.gille.dropwizard.monitoring.health.ChainedHealthCheckDecorator;
 import org.jon.gille.dropwizard.monitoring.health.HealthCheckSettingsExtractor;
+import org.jon.gille.dropwizard.monitoring.health.reflection.OptionallyCacheHealthCheckResult;
 import org.jon.gille.dropwizard.monitoring.health.reflection.ReflectiveHealthCheckSettingsExtractor;
 
 import java.util.List;
@@ -17,17 +19,23 @@ public class DelegatingHealthCheckService implements HealthCheckService {
     private final HealthCheckRegistry healthCheckRegistry;
     private final HealthCheckSettingsRegistry settingsRegistry;
     private final HealthCheckSettingsExtractor settingsExtractor;
+    private final HealthCheckDecorator healthCheckDecorator;
 
     public DelegatingHealthCheckService(HealthCheckRegistry healthCheckRegistry) {
-        this(healthCheckRegistry, new HealthCheckSettingsRegistry(), new ReflectiveHealthCheckSettingsExtractor());
+        this(healthCheckRegistry, new HealthCheckSettingsRegistry(), new ReflectiveHealthCheckSettingsExtractor(),
+                ChainedHealthCheckDecorator.builder()
+                        .add(new OptionallyCacheHealthCheckResult())
+                        .build());
     }
 
     public DelegatingHealthCheckService(HealthCheckRegistry healthCheckRegistry,
                                         HealthCheckSettingsRegistry settingsRegistry,
-                                        HealthCheckSettingsExtractor settingsExtractor) {
+                                        HealthCheckSettingsExtractor settingsExtractor,
+                                        HealthCheckDecorator healthCheckDecorator) {
         this.healthCheckRegistry = healthCheckRegistry;
         this.settingsRegistry = settingsRegistry;
         this.settingsExtractor = settingsExtractor;
+        this.healthCheckDecorator = healthCheckDecorator;
     }
 
     @Override
@@ -37,7 +45,7 @@ public class DelegatingHealthCheckService implements HealthCheckService {
 
     @Override
     public void registerHealthCheck(String name, HealthCheck healthCheck, HealthCheckSettings settings) {
-        healthCheckRegistry.register(name, healthCheck);
+        healthCheckRegistry.register(name, decorate(healthCheck));
         settingsRegistry.register(name, settings);
     }
 
@@ -62,6 +70,10 @@ public class DelegatingHealthCheckService implements HealthCheckService {
     public List<HealthCheckResult> runHealthChecksConcurrently(ExecutorService executor) {
         SortedMap<String, HealthCheck.Result> results = healthCheckRegistry.runHealthChecks(executor);
         return mapToHealthCheckResults(results);
+    }
+
+    private HealthCheck decorate(HealthCheck healthCheck) {
+        return healthCheckDecorator.decorate(healthCheck);
     }
 
     private HealthCheckResult mapToHealthCheckResult(String name, HealthCheck.Result result) {

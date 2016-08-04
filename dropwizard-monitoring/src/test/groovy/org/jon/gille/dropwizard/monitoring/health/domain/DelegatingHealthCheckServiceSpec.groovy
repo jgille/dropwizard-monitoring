@@ -223,7 +223,9 @@ class DelegatingHealthCheckServiceSpec extends Specification {
         def healthCheckRegistry = mock(HealthCheckRegistry.class)
         def settingsRegistry = mock(HealthCheckSettingsRegistry.class)
         def settingsExtractor = mock(HealthCheckSettingsExtractor.class)
-        def service = new DelegatingHealthCheckService(healthCheckRegistry, settingsRegistry, settingsExtractor)
+        def healthCheckDecorator = { c -> c }
+        def service = new DelegatingHealthCheckService(healthCheckRegistry, settingsRegistry,
+                settingsExtractor, healthCheckDecorator)
 
         when:
         def name = "some name"
@@ -245,7 +247,10 @@ class DelegatingHealthCheckServiceSpec extends Specification {
         def check = mock(HealthCheck.class)
         when(settingsExtractor.extractSettings(check)).thenReturn(settings)
 
-        def service = new DelegatingHealthCheckService(healthCheckRegistry, settingsRegistry, settingsExtractor)
+        def healthCheckDecorator = { c -> c }
+
+        def service = new DelegatingHealthCheckService(healthCheckRegistry, settingsRegistry,
+                settingsExtractor, healthCheckDecorator)
 
         when:
         def name = "some name"
@@ -254,5 +259,29 @@ class DelegatingHealthCheckServiceSpec extends Specification {
         then:
         verify(healthCheckRegistry).register(name, check)
         verify(settingsRegistry).register(name, settings)
+    }
+
+    def "A health check is decorated when registered"() {
+        given:
+        def healthCheckRegistry = mock(HealthCheckRegistry.class)
+        def settingsRegistry = mock(HealthCheckSettingsRegistry.class)
+        def settingsExtractor = mock(HealthCheckSettingsExtractor.class)
+        def settings = HealthCheckSettings.DEFAULT_SETTINGS
+        def rawCheck = mock(HealthCheck.class)
+        when(settingsExtractor.extractSettings(rawCheck)).thenReturn(settings)
+
+        def decoratedCheck = mock(HealthCheck.class)
+        def healthCheckDecorator = mock(HealthCheckDecorator.class)
+        when(healthCheckDecorator.decorate(rawCheck)).thenReturn(decoratedCheck)
+
+        def service = new DelegatingHealthCheckService(healthCheckRegistry, settingsRegistry,
+                settingsExtractor, healthCheckDecorator)
+
+        when:
+        def name = "some name"
+        service.registerHealthCheck(name, rawCheck)
+
+        then:
+        verify(healthCheckRegistry).register(name, decoratedCheck)
     }
 }

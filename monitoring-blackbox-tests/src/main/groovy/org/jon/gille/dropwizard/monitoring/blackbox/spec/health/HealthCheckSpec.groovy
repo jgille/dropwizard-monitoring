@@ -22,7 +22,7 @@ class HealthCheckSpec extends Specification {
         def unhealthy = health.unhealthy as List
 
         then:
-        healthy.size == 2
+        healthy.size == 3
 
         and:
         healthy[0] == [
@@ -34,7 +34,13 @@ class HealthCheckSpec extends Specification {
         ]
 
         and:
-        healthy[1] == [
+        healthy[1].name == 'cached'
+
+        and:
+        healthy[1].status == 'HEALTHY'
+
+        and:
+        healthy[2] == [
                 name: 'deadlocks',
                 status: 'HEALTHY',
                 type: 'SELF'

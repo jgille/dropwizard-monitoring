@@ -9,6 +9,7 @@ import org.jon.gille.dropwizard.monitoring.health.domain.HealthCheckSettings;
 import org.jon.gille.dropwizard.monitoring.health.domain.Level;
 import org.jon.gille.dropwizard.monitoring.health.domain.Type;
 import org.jon.gille.dropwizard.monitoring.sample.app.health.AnnotatedHealthCheck;
+import org.jon.gille.dropwizard.monitoring.sample.app.health.CachingHealthCheck;
 import org.jon.gille.dropwizard.monitoring.sample.app.health.UnhealthyHealthCheck;
 
 public class SampleApp extends Application<SampleConfiguration> {
@@ -24,6 +25,7 @@ public class SampleApp extends Application<SampleConfiguration> {
     @Override
     public void run(SampleConfiguration configuration, Environment environment) throws Exception {
         monitoringBundle.registerHealthCheck("annotated", new AnnotatedHealthCheck());
+        monitoringBundle.registerHealthCheck("cached", new CachingHealthCheck());
         monitoringBundle.registerHealthCheck("broken", new UnhealthyHealthCheck(),
                 HealthCheckSettings.withLevel(Level.CRITICAL)
                         .withType(Type.SELF)
