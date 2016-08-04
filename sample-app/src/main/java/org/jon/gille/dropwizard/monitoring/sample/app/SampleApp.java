@@ -11,18 +11,18 @@ import org.jon.gille.dropwizard.monitoring.health.domain.Type;
 import org.jon.gille.dropwizard.monitoring.sample.app.health.AnnotatedHealthCheck;
 import org.jon.gille.dropwizard.monitoring.sample.app.health.UnhealthyHealthCheck;
 
-public class SampleApp extends Application<Configuration> {
+public class SampleApp extends Application<SampleConfiguration> {
 
-    private final DropwizardMonitoringBundle<Configuration> monitoringBundle =
+    private final DropwizardMonitoringBundle<SampleConfiguration> monitoringBundle =
             new DropwizardMonitoringBundle<>();
 
     @Override
-    public void initialize(Bootstrap<Configuration> bootstrap) {
+    public void initialize(Bootstrap<SampleConfiguration> bootstrap) {
         bootstrap.addBundle(monitoringBundle);
     }
 
     @Override
-    public void run(Configuration configuration, Environment environment) throws Exception {
+    public void run(SampleConfiguration configuration, Environment environment) throws Exception {
         monitoringBundle.registerHealthCheck("annotated", new AnnotatedHealthCheck());
         monitoringBundle.registerHealthCheck("broken", new UnhealthyHealthCheck(),
                 HealthCheckSettings.withLevel(Level.CRITICAL)

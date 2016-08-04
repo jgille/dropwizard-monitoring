@@ -6,3 +6,8 @@ server:
   adminConnectors:
     - type: http
       port: 9066
+
+health:
+  reporters:
+    - type: console
+      frequency: 2s

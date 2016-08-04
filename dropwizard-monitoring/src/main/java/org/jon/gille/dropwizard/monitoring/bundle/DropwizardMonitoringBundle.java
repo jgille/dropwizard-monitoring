@@ -1,21 +1,30 @@
 package org.jon.gille.dropwizard.monitoring.bundle;
 
 import com.codahale.metrics.health.HealthCheck;
+import com.google.common.collect.ImmutableList;
 import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.jersey.DropwizardResourceConfig;
 import io.dropwizard.jersey.setup.JerseyContainerHolder;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.dropwizard.util.Duration;
 import org.glassfish.jersey.servlet.ServletContainer;
+import org.jon.gille.dropwizard.monitoring.config.DropwizardMonitoringConfiguration;
+import org.jon.gille.dropwizard.monitoring.config.HealthConfiguration;
 import org.jon.gille.dropwizard.monitoring.health.domain.*;
+import org.jon.gille.dropwizard.monitoring.health.reporting.HealthReporterFactory;
+import org.jon.gille.dropwizard.monitoring.health.reporting.ScheduledServiceHealthReporter;
 import org.jon.gille.dropwizard.monitoring.health.resource.HealthCheckResource;
 import org.jon.gille.dropwizard.monitoring.metadata.domain.InstanceMetadataProvider;
 import org.jon.gille.dropwizard.monitoring.metadata.domain.LocalHostInstanceMetadataProvider;
 import org.jon.gille.dropwizard.monitoring.metadata.domain.ServiceMetadata;
 import org.jon.gille.dropwizard.monitoring.metadata.resource.ServiceMetadataResource;
 
-public class DropwizardMonitoringBundle<C extends Configuration> implements ConfiguredBundle<C> {
+import java.util.Optional;
+import java.util.concurrent.ScheduledExecutorService;
+
+public class DropwizardMonitoringBundle<C extends DropwizardMonitoringConfiguration> implements ConfiguredBundle<C> {
 
     private final String instanceId;
     private final String hostAddress;
@@ -48,15 +57,33 @@ public class DropwizardMonitoringBundle<C extends Configuration> implements Conf
                 .build();
 
         registerResources(environment, "/service/*", serviceMetadata);
-    }
 
-    private void configureDefaultDropwizardChecks() {
-        configureHealthCheck("deadlocks", HealthCheckSettings.withLevel(Level.CRITICAL).withType(Type.SELF) .build());
+        scheduleReporters(configuration, environment, serviceMetadata);
     }
 
     @Override
     public void initialize(Bootstrap<?> bootstrap) {
 
+    }
+
+    private void scheduleReporters(C configuration, Environment environment, ServiceMetadata serviceMetadata) {
+        HealthConfiguration health = configuration.getHealth();
+        ImmutableList<HealthReporterFactory> reporters = health.getReporters();
+
+        reporters.forEach(reporter -> {
+            Duration frequency = reporter.getFrequency().orElse(health.getDefaultReportingFrequency());
+            ScheduledExecutorService scheduler =
+                    environment.lifecycle().scheduledExecutorService(reporter.getName())
+                    .threads(1).build();
+            ScheduledServiceHealthReporter scheduledReporter =
+                    new ScheduledServiceHealthReporter(serviceMetadata, healthCheckService, scheduler,
+                            frequency, reporter.build());
+            environment.lifecycle().manage(scheduledReporter);
+        });
+    }
+
+    private void configureDefaultDropwizardChecks() {
+        configureHealthCheck("deadlocks", HealthCheckSettings.withLevel(Level.CRITICAL).withType(Type.SELF) .build());
     }
 
     public void registerHealthCheck(String name, HealthCheck healthCheck) {

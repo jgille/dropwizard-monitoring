@@ -7,6 +7,9 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
+
+import static java.util.stream.Collectors.toList;
 
 public class ServiceHealth extends ValueObject {
 
@@ -26,6 +29,18 @@ public class ServiceHealth extends ValueObject {
 
     public List<HealthCheckResult> executedChecks() {
         return Collections.unmodifiableList(executedChecks);
+    }
+
+    public List<HealthCheckResult> healthyChecks() {
+        return executedChecks(HealthCheckResult::isHealthy);
+    }
+
+    public List<HealthCheckResult> unhealthyChecks() {
+        return executedChecks(HealthCheckResult::isUnhealthy);
+    }
+
+    public List<HealthCheckResult> executedChecks(Predicate<HealthCheckResult> filter) {
+        return executedChecks.stream().filter(filter).collect(toList());
     }
 
     public Instant timestamp() {

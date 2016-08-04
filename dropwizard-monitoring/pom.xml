@@ -19,7 +19,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- TODO: Do I really need to bring in core? -->
         <dependency>
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-core</artifactId>
