@@ -9,7 +9,7 @@ import spock.lang.Specification
 
 import java.time.Instant
 
-class ConsoleHealthReporterTest extends Specification {
+class ConsoleHealthReporterSpec extends Specification {
 
     def "The console reporter prints service health information to the provided print stream"() {
         given:
