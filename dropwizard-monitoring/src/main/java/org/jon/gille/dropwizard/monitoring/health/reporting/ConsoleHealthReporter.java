@@ -29,7 +29,7 @@ class ConsoleHealthReporter implements ServiceHealthReporter {
         out.println();
 
         if (!unhealthyChecks.isEmpty()) {
-            out.println("------ Unhealthy checks ------ ");
+            out.println("------ Unhealthy checks ------");
             unhealthyChecks.forEach(c -> {
                 out.printf("    * %s - %s", c.name(), c.status().name());
                 out.println();
