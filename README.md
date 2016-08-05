@@ -65,7 +65,7 @@ Service metadata
 ----------------
 
 In a distributed environment, being able to ask a service to tell a little about itself can be really valuable. The bundle
-will add an endpoint on host:adminPort/service/metadata that will return things like the service name, the version it's running',
+will add an endpoint on host:adminPort/service/metadata that will return things like the service name, the version it's running,
 the id of the instance it's running on (perhaps en EC2 instance id) etc.
 
 Example response:
@@ -91,7 +91,7 @@ Apart from proving endpoints which a monitoring tool can poll, you can also push
 pretty much the same way as the Dropwizard metrics reporters, you configure a list of reporters each having a frequency
 (how often to check health and report it).
 
-You can easily create your own reporter(s). Perhaps publishing to Kafka or sending events to Riemann?
+A simple console reporter and one that will push json with http is implemented, but you can also easily create your own reporter(s). Perhaps publishing to Kafka or sending events to Riemann?
 
 Caching health check results
 ----------------------------
