@@ -33,7 +33,7 @@ health check registry.
 
 Example response from the endpoint:
 
-`
+<pre>
 {
   "unhealthy": [
     {
@@ -59,7 +59,7 @@ Example response from the endpoint:
     }
   ]
 }
-`
+</pre>
 
 Service metadata
 ----------------
@@ -70,7 +70,7 @@ the id of the instance it's running on (perhaps en EC2 instance id) etc.
 
 Example response:
 
-`
+<pre>
 {
   "service": {
     "service_id": "sample_app",
@@ -82,7 +82,7 @@ Example response:
     "host_address": "172.17.2.61"
   }
 }
-`
+</pre>
 
 Reporting service health
 ------------------------
@@ -114,4 +114,5 @@ There are also black box tests where a sample service and a sample monitoring se
 To build and run all tests:
 
 mvn clean install -Pfatjar
+
 ./blackbox.sh verify
