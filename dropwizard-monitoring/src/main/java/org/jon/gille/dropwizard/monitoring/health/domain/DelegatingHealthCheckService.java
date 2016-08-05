@@ -40,13 +40,14 @@ public class DelegatingHealthCheckService implements HealthCheckService {
 
     @Override
     public void registerHealthCheck(String name, HealthCheck healthCheck) {
-        registerHealthCheck(name, healthCheck, settingsExtractor.extractSettings(healthCheck));
+        registerHealthCheckAndSettings(name, healthCheck, settingsExtractor.extractSettings(healthCheck));
     }
 
     @Override
-    public void registerHealthCheck(String name, HealthCheck healthCheck, HealthCheckSettings settings) {
-        healthCheckRegistry.register(name, decorate(healthCheck));
-        settingsRegistry.register(name, settings);
+    public void registerHealthCheck(String name, HealthCheck healthCheck, HealthCheckSettings override) {
+        HealthCheckSettings annotatedSettings = settingsExtractor.extractSettings(healthCheck);
+        HealthCheckSettings mergedSettings = annotatedSettings.overridenWith(override);
+        registerHealthCheckAndSettings(name, healthCheck, mergedSettings);
     }
 
     @Override
@@ -72,12 +73,17 @@ public class DelegatingHealthCheckService implements HealthCheckService {
         return mapToHealthCheckResults(results);
     }
 
+    private void registerHealthCheckAndSettings(String name, HealthCheck healthCheck, HealthCheckSettings settings) {
+        healthCheckRegistry.register(name, decorate(healthCheck));
+        settingsRegistry.register(name, settings);
+    }
+
     private HealthCheck decorate(HealthCheck healthCheck) {
         return healthCheckDecorator.decorate(healthCheck);
     }
 
     private HealthCheckResult mapToHealthCheckResult(String name, HealthCheck.Result result) {
-        HealthCheckSettings settings = settings(name);
+        HealthCheckSettings settings = settingsRegistry.settings(name, HealthCheckSettings.DEFAULT_SETTINGS);
         return new HealthCheckResult(name, settings, result);
     }
 
@@ -89,10 +95,6 @@ public class DelegatingHealthCheckService implements HealthCheckService {
 
     private HealthCheckResult mapToHealthCheckResult(Map.Entry<String, HealthCheck.Result> entry) {
         return mapToHealthCheckResult(entry.getKey(), entry.getValue());
-    }
-
-    private HealthCheckSettings settings(String name) {
-        return settingsRegistry.settings(name, HealthCheckSettings.DEFAULT_SETTINGS);
     }
 
 }

@@ -47,6 +47,19 @@ public class HealthCheckSettings extends ValueObject {
         return link;
     }
 
+    public HealthCheckSettings overridenWith(HealthCheckSettings other) {
+        return withLevel(other.level())
+                .withType(orElse(other.type(), type))
+                .withDescription(orElse(other.description(), description))
+                .withDependentOn(orElse(other.dependentOn(), dependentOn))
+                .withLink(orElse(other.link(), link))
+                .build();
+    }
+
+    private <T> T orElse(Optional<T> wanted, Optional<T> defaultTo) {
+        return wanted.orElse(defaultTo.orElse(null));
+    }
+
     public static Builder withLevel(Level level) {
         return new Builder(level);
     }

@@ -15,12 +15,12 @@ class HealthCheckSettingsSpec extends Specification {
 
         def settings =
                 HealthCheckSettings
-                .withLevel(level)
-                .withType(type)
-        .withDescription(description)
-        .withDependentOn(dependentOn)
-        .withLink(link)
-        .build()
+                        .withLevel(level)
+                        .withType(type)
+                        .withDescription(description)
+                        .withDependentOn(dependentOn)
+                        .withLink(link)
+                        .build()
 
         then:
         settings.level() == level
@@ -63,6 +63,53 @@ class HealthCheckSettingsSpec extends Specification {
 
         and:
         settings.link() == Optional.empty()
+    }
+
+    def "Empty fields does not replace original ones when overriding settings"() {
+        given:
+        def originalSettings = HealthCheckSettings.withLevel(Level.CRITICAL)
+                .withType("type")
+                .withDescription("desc")
+                .withDependentOn("dep")
+                .withLink("link")
+                .build()
+
+        def overrideWith = HealthCheckSettings.withLevel(Level.WARNING).build()
+
+        when:
+        def merged = originalSettings.overridenWith(overrideWith)
+
+        then:
+        merged == HealthCheckSettings.withLevel(Level.WARNING)
+                .withType("type")
+                .withDescription("desc")
+                .withDependentOn("dep")
+                .withLink("link")
+                .build()
+
+    }
+
+    def "All non empty fields replaces original ones when overriding settings"() {
+        given:
+        def originalSettings = HealthCheckSettings.withLevel(Level.CRITICAL)
+                .withType("type")
+                .withDescription("desc")
+                .withDependentOn("dep")
+                .withLink("link")
+                .build()
+
+        def overrideWith =  HealthCheckSettings.withLevel(Level.WARNING)
+                .withType("type1")
+                .withDescription("descciption")
+                .withDependentOn("depOn")
+                .withLink("link2")
+                .build()
+
+        when:
+        def merged = originalSettings.overridenWith(overrideWith)
+
+        then:
+        merged == overrideWith
 
     }
 }

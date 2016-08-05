@@ -227,10 +227,13 @@ class DelegatingHealthCheckServiceSpec extends Specification {
         def service = new DelegatingHealthCheckService(healthCheckRegistry, settingsRegistry,
                 settingsExtractor, healthCheckDecorator)
 
-        when:
         def name = "some name"
         def check = mock(HealthCheck.class)
         def settings = HealthCheckSettings.withLevel(Level.CRITICAL).withType("EXTERNAL_DEPENDENCY").build()
+        when(settingsExtractor.extractSettings(check)).thenReturn(HealthCheckSettings.DEFAULT_SETTINGS)
+
+        when:
+
         service.registerHealthCheck(name, check, settings)
 
         then:
@@ -259,6 +262,45 @@ class DelegatingHealthCheckServiceSpec extends Specification {
         then:
         verify(healthCheckRegistry).register(name, check)
         verify(settingsRegistry).register(name, settings)
+    }
+
+    def "Registering a health check with settings overrides annotation based settings"() {
+        given:
+        def check = mock(HealthCheck.class)
+
+        def healthCheckRegistry = mock(HealthCheckRegistry.class)
+        def settingsRegistry = mock(HealthCheckSettingsRegistry.class)
+        def settingsExtractor = mock(HealthCheckSettingsExtractor.class)
+
+        def annotationSettings = HealthCheckSettings
+                .withLevel(Level.CRITICAL)
+                .withType("SELF")
+                .withDescription("Some description")
+                .withDependentOn("some_service")
+                .withLink("www.me.com")
+                .build()
+        when(settingsExtractor.extractSettings(check)).thenReturn(annotationSettings)
+
+        def healthCheckDecorator = { c -> c }
+        def service = new DelegatingHealthCheckService(healthCheckRegistry, settingsRegistry,
+                settingsExtractor, healthCheckDecorator)
+
+        def name = "some name"
+        def settings = HealthCheckSettings.withLevel(Level.WARNING).withType("EXTERNAL_DEPENDENCY").build()
+
+        when:
+
+        service.registerHealthCheck(name, check, settings)
+
+        then:
+        verify(healthCheckRegistry).register(name, check)
+        verify(settingsRegistry).register(name, HealthCheckSettings
+                .withLevel(Level.WARNING)
+                .withType("EXTERNAL_DEPENDENCY")
+                .withDescription("Some description")
+                .withDependentOn("some_service")
+                .withLink("www.me.com")
+                .build())
     }
 
     def "A health check is decorated when registered"() {
