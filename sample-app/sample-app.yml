@@ -11,6 +11,7 @@ health:
   reporters:
     - type: console
       frequency: 2s
+
     - type: http-post
       frequency: 5s
       uri: http://monitor:8067/monitor/services
