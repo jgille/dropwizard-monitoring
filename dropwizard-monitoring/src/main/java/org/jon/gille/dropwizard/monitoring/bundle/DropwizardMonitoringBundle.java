@@ -2,7 +2,6 @@ package org.jon.gille.dropwizard.monitoring.bundle;
 
 import com.codahale.metrics.health.HealthCheck;
 import com.google.common.collect.ImmutableList;
-import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.jersey.DropwizardResourceConfig;
 import io.dropwizard.jersey.setup.JerseyContainerHolder;
@@ -13,7 +12,10 @@ import io.dropwizard.util.Duration;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.jon.gille.dropwizard.monitoring.config.DropwizardMonitoringConfiguration;
 import org.jon.gille.dropwizard.monitoring.config.HealthConfiguration;
-import org.jon.gille.dropwizard.monitoring.health.domain.*;
+import org.jon.gille.dropwizard.monitoring.health.domain.DelegatingHealthCheckService;
+import org.jon.gille.dropwizard.monitoring.health.domain.HealthCheckService;
+import org.jon.gille.dropwizard.monitoring.health.domain.HealthCheckSettings;
+import org.jon.gille.dropwizard.monitoring.health.domain.Level;
 import org.jon.gille.dropwizard.monitoring.health.reporting.HealthReporterFactory;
 import org.jon.gille.dropwizard.monitoring.health.reporting.ScheduledServiceHealthReporter;
 import org.jon.gille.dropwizard.monitoring.health.reporting.ServiceHealthReporter;
@@ -23,7 +25,6 @@ import org.jon.gille.dropwizard.monitoring.metadata.domain.LocalHostInstanceMeta
 import org.jon.gille.dropwizard.monitoring.metadata.domain.ServiceMetadata;
 import org.jon.gille.dropwizard.monitoring.metadata.resource.ServiceMetadataResource;
 
-import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
 
 public class DropwizardMonitoringBundle<C extends DropwizardMonitoringConfiguration> implements ConfiguredBundle<C> {
@@ -89,7 +90,7 @@ public class DropwizardMonitoringBundle<C extends DropwizardMonitoringConfigurat
     }
 
     private void configureDefaultDropwizardChecks() {
-        configureHealthCheck("deadlocks", HealthCheckSettings.withLevel(Level.CRITICAL).withType(Type.SELF) .build());
+        configureHealthCheck("deadlocks", HealthCheckSettings.withLevel(Level.CRITICAL).build());
     }
 
     public void registerHealthCheck(String name, HealthCheck healthCheck) {

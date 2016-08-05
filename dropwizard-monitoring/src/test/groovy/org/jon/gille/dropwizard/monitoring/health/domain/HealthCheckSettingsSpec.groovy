@@ -8,7 +8,7 @@ class HealthCheckSettingsSpec extends Specification {
         when:
 
         def level = Level.WARNING
-        def type = Type.INFRASTRUCTURE
+        def type = "INFRASTRUCTURE"
         def description = "Some description"
         def dependentOn = "some_service"
         def link = "www.google.com"
@@ -23,10 +23,10 @@ class HealthCheckSettingsSpec extends Specification {
         .build()
 
         then:
-        settings.type() == type
+        settings.level() == level
 
         and:
-        settings.level() == level
+        settings.type() == Optional.of(type)
 
         and:
         settings.description() == Optional.of(description)
@@ -43,19 +43,17 @@ class HealthCheckSettingsSpec extends Specification {
         when:
 
         def level = Level.WARNING
-        def type = Type.INFRASTRUCTURE
 
         def settings =
                 HealthCheckSettings
                         .withLevel(level)
-                        .withType(type)
                         .build()
 
         then:
-        settings.type() == type
+        settings.level() == level
 
         and:
-        settings.level() == level
+        settings.type() == Optional.empty()
 
         and:
         settings.description() == Optional.empty()

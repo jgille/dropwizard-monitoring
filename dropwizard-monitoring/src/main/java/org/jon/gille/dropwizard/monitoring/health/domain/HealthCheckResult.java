@@ -25,7 +25,7 @@ public class HealthCheckResult extends ValueObject {
         return settings.level().mapToStatus(isHealthy());
     }
 
-    public Type type() {
+    public Optional<String> type() {
         return settings.type();
     }
 

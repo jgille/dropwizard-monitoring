@@ -1,13 +1,12 @@
 package org.jon.gille.dropwizard.monitoring.sample.app.health;
 
 import com.codahale.metrics.health.HealthCheck;
-import org.jon.gille.dropwizard.monitoring.health.annotation.HealthCheckProperties;
+import org.jon.gille.dropwizard.monitoring.health.annotation.Settings;
 import org.jon.gille.dropwizard.monitoring.health.domain.Level;
-import org.jon.gille.dropwizard.monitoring.health.domain.Type;
 
-@HealthCheckProperties(
+@Settings(
         level = Level.WARNING,
-        type = Type.EXTERNAL_DEPENDENCY,
+        type = "EXTERNAL_DEPENDENCY",
         dependentOn = "google"
 )
 public class AnnotatedHealthCheck extends HealthCheck {

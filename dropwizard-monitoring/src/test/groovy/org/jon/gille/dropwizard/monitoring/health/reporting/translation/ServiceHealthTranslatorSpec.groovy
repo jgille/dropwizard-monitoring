@@ -31,7 +31,7 @@ class ServiceHealthTranslatorSpec extends Specification {
                 "c2",
                 HealthCheckSettings
                         .withLevel(Level.WARNING)
-                        .withType(Type.EXTERNAL_DEPENDENCY)
+                        .withType("EXTERNAL_DEPENDENCY")
                         .withDescription("Some check")
                         .withDependentOn("google")
                         .withLink("www.google.com")
@@ -93,7 +93,7 @@ class ServiceHealthTranslatorSpec extends Specification {
         assert translated.name == source.name()
         assert translated.message == source.message().orElse(null)
         assert translated.status == source.status().name()
-        assert translated.type == source.type().name()
+        assert translated.type == source.type().orElse(null)
         assert translated.description == source.description().orElse(null)
         assert translated.dependent_on == source.dependentOn().orElse(null)
         assert translated.link == source.link().orElse(null)

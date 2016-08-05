@@ -7,11 +7,11 @@ import java.util.Optional;
 public class HealthCheckSettings extends ValueObject {
 
     public static final HealthCheckSettings DEFAULT_SETTINGS =
-            HealthCheckSettings.withLevel(Level.CRITICAL).withType(Type.DEFAULT).build();
+            HealthCheckSettings.withLevel(Level.CRITICAL).build();
 
     private final Level level;
 
-    private final Type type;
+    private final Optional<String> type;
 
     private final Optional<String> description;
 
@@ -21,7 +21,7 @@ public class HealthCheckSettings extends ValueObject {
 
     public HealthCheckSettings(Builder builder) {
         this.level = builder.level;
-        this.type = builder.type;
+        this.type = Optional.ofNullable(builder.type);
         this.description = Optional.ofNullable(builder.description);
         this.dependentOn = Optional.ofNullable(builder.dependentOn);
         this.link = Optional.ofNullable(builder.link);
@@ -31,7 +31,7 @@ public class HealthCheckSettings extends ValueObject {
         return level;
     }
 
-    public Type type() {
+    public Optional<String> type() {
         return type;
     }
 
@@ -47,28 +47,15 @@ public class HealthCheckSettings extends ValueObject {
         return link;
     }
 
-    public static LevelBuilder withLevel(Level level) {
-        return new LevelBuilder(level);
-    }
-
-    public static class LevelBuilder {
-        private final Level level;
-
-        private LevelBuilder(Level level) {
-            this.level = level;
-        }
-
-        public Builder withType(Type type) {
-            return new Builder(level, type);
-        }
-
+    public static Builder withLevel(Level level) {
+        return new Builder(level);
     }
 
     public static class Builder {
 
         private final Level level;
 
-        private final Type type;
+        private String type;
 
         private String description;
 
@@ -76,9 +63,13 @@ public class HealthCheckSettings extends ValueObject {
 
         private String link;
 
-        private Builder(Level level, Type type) {
+        private Builder(Level level) {
             this.level = level;
+        }
+
+        public Builder withType(String type) {
             this.type = type;
+            return this;
         }
 
         public Builder withDescription(String description) {

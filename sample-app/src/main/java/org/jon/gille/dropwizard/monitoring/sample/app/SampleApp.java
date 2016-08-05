@@ -1,13 +1,11 @@
 package org.jon.gille.dropwizard.monitoring.sample.app;
 
 import io.dropwizard.Application;
-import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.jon.gille.dropwizard.monitoring.bundle.DropwizardMonitoringBundle;
 import org.jon.gille.dropwizard.monitoring.health.domain.HealthCheckSettings;
 import org.jon.gille.dropwizard.monitoring.health.domain.Level;
-import org.jon.gille.dropwizard.monitoring.health.domain.Type;
 import org.jon.gille.dropwizard.monitoring.sample.app.health.AnnotatedHealthCheck;
 import org.jon.gille.dropwizard.monitoring.sample.app.health.CachingHealthCheck;
 import org.jon.gille.dropwizard.monitoring.sample.app.health.UnhealthyHealthCheck;
@@ -28,7 +26,7 @@ public class SampleApp extends Application<SampleConfiguration> {
         monitoringBundle.registerHealthCheck("cached", new CachingHealthCheck());
         monitoringBundle.registerHealthCheck("broken", new UnhealthyHealthCheck(),
                 HealthCheckSettings.withLevel(Level.CRITICAL)
-                        .withType(Type.SELF)
+                        .withType("SELF")
                         .withDescription("I will always fail")
                         .build());
     }

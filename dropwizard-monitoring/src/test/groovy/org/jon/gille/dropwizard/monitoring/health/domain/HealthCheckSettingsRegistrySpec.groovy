@@ -54,7 +54,7 @@ class HealthCheckSettingsRegistrySpec extends Specification {
         def name = "somethings"
         def registered = HealthCheckSettings
                 .withLevel(Level.WARNING)
-                .withType(Type.EXTERNAL_DEPENDENCY)
+                .withType("EXTERNAL_DEPENDENCY")
                 .withDescription("some description")
                 .withLink("www.google.com")
                 .build()

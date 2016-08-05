@@ -17,7 +17,7 @@ public final class HealthCheckResultTranslator {
                 healthCheckResult.description().orElse(null),
                 healthCheckResult.message().orElse(null),
                 mapError(healthCheckResult.error()),
-                healthCheckResult.type().name(),
+                healthCheckResult.type().orElse(null),
                 healthCheckResult.dependentOn().orElse(null),
                 healthCheckResult.link().orElse(null));
     }

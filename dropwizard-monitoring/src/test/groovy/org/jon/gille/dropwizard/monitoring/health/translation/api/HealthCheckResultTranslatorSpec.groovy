@@ -4,7 +4,7 @@ import com.codahale.metrics.health.HealthCheck
 import org.jon.gille.dropwizard.monitoring.health.domain.HealthCheckResult
 import org.jon.gille.dropwizard.monitoring.health.domain.HealthCheckSettings
 import org.jon.gille.dropwizard.monitoring.health.domain.Level
-import org.jon.gille.dropwizard.monitoring.health.domain.Type
+
 import spock.lang.Specification
 
 class HealthCheckResultTranslatorSpec extends Specification {
@@ -23,7 +23,7 @@ class HealthCheckResultTranslatorSpec extends Specification {
         dto.status == check.status().name()
 
         and:
-        dto.type == check.type().name()
+        dto.type == null
 
         and:
         dto.message == null
@@ -46,7 +46,7 @@ class HealthCheckResultTranslatorSpec extends Specification {
         def message = "Yeay"
         def check = new HealthCheckResult("c",
                 HealthCheckSettings.withLevel(Level.WARNING)
-                .withType(Type.EXTERNAL_DEPENDENCY)
+                .withType("EXTERNAL_DEPENDENCY")
                 .withDescription("Some descriptio")
                 .withDependentOn("some_service")
                 .withLink("127.0.0.1")
@@ -63,7 +63,7 @@ class HealthCheckResultTranslatorSpec extends Specification {
         dto.status == check.status().name()
 
         and:
-        dto.type == check.type().name()
+        dto.type == check.type().get()
 
         and:
         dto.message == message

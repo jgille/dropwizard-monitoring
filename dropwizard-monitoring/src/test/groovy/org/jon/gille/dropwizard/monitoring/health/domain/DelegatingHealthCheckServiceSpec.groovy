@@ -27,7 +27,7 @@ class DelegatingHealthCheckServiceSpec extends Specification {
 
         def check = mock(HealthCheck.class)
 
-        def settings = HealthCheckSettings.withLevel(Level.WARNING).withType(Type.EXTERNAL_DEPENDENCY).build()
+        def settings = HealthCheckSettings.withLevel(Level.WARNING).withType("EXTERNAL_DEPENDENCY").build()
         service.registerHealthCheck(name, check, settings)
 
         when:
@@ -123,7 +123,7 @@ class DelegatingHealthCheckServiceSpec extends Specification {
         when(healthCheckRegistry.runHealthCheck(name)).thenReturn(HealthCheck.Result.unhealthy(message))
 
         def settingsRegistry = new HealthCheckSettingsRegistry()
-        def settings = HealthCheckSettings.withLevel(Level.CRITICAL).withType(Type.EXTERNAL_DEPENDENCY).build()
+        def settings = HealthCheckSettings.withLevel(Level.CRITICAL).withType("EXTERNAL_DEPENDENCY").build()
         settingsRegistry.register(name, settings)
 
         def service = new DelegatingHealthCheckService(healthCheckRegistry)
@@ -158,7 +158,7 @@ class DelegatingHealthCheckServiceSpec extends Specification {
         healthCheckResults.put(checkTwo, HealthCheck.Result.healthy(messageTwo))
         when(healthCheckRegistry.runHealthChecks()).thenReturn(healthCheckResults)
 
-        def settings = HealthCheckSettings.withLevel(Level.WARNING).withType(Type.EXTERNAL_DEPENDENCY).build()
+        def settings = HealthCheckSettings.withLevel(Level.WARNING).withType("EXTERNAL_DEPENDENCY").build()
 
         def check = mock(HealthCheck.class)
 
@@ -196,7 +196,7 @@ class DelegatingHealthCheckServiceSpec extends Specification {
         healthCheckResults.put(checkTwo, HealthCheck.Result.healthy(messageTwo))
         when(healthCheckRegistry.runHealthChecks(executor)).thenReturn(healthCheckResults)
 
-        def settings = HealthCheckSettings.withLevel(Level.WARNING).withType(Type.EXTERNAL_DEPENDENCY).build()
+        def settings = HealthCheckSettings.withLevel(Level.WARNING).withType("EXTERNAL_DEPENDENCY").build()
 
         def check = mock(HealthCheck.class)
 
@@ -230,7 +230,7 @@ class DelegatingHealthCheckServiceSpec extends Specification {
         when:
         def name = "some name"
         def check = mock(HealthCheck.class)
-        def settings = HealthCheckSettings.withLevel(Level.CRITICAL).withType(Type.EXTERNAL_DEPENDENCY).build()
+        def settings = HealthCheckSettings.withLevel(Level.CRITICAL).withType("EXTERNAL_DEPENDENCY").build()
         service.registerHealthCheck(name, check, settings)
 
         then:
@@ -243,7 +243,7 @@ class DelegatingHealthCheckServiceSpec extends Specification {
         def healthCheckRegistry = mock(HealthCheckRegistry.class)
         def settingsRegistry = mock(HealthCheckSettingsRegistry.class)
         def settingsExtractor = mock(HealthCheckSettingsExtractor.class)
-        def settings = HealthCheckSettings.withLevel(Level.CRITICAL).withType(Type.EXTERNAL_DEPENDENCY).build()
+        def settings = HealthCheckSettings.withLevel(Level.CRITICAL).withType("EXTERNAL_DEPENDENCY").build()
         def check = mock(HealthCheck.class)
         when(settingsExtractor.extractSettings(check)).thenReturn(settings)
 

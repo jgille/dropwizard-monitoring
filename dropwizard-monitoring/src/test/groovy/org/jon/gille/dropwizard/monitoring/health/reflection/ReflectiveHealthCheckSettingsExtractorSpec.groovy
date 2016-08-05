@@ -1,10 +1,10 @@
 package org.jon.gille.dropwizard.monitoring.health.reflection
 
 import com.codahale.metrics.health.HealthCheck
-import org.jon.gille.dropwizard.monitoring.health.annotation.HealthCheckProperties
+import org.jon.gille.dropwizard.monitoring.health.annotation.Settings
 import org.jon.gille.dropwizard.monitoring.health.domain.HealthCheckSettings
 import org.jon.gille.dropwizard.monitoring.health.domain.Level
-import org.jon.gille.dropwizard.monitoring.health.domain.Type
+
 import spock.lang.Specification
 
 class ReflectiveHealthCheckSettingsExtractorSpec extends Specification {
@@ -29,7 +29,7 @@ class ReflectiveHealthCheckSettingsExtractorSpec extends Specification {
 
         then:
         settings.level() == Level.WARNING
-        settings.type() == Type.EXTERNAL_DEPENDENCY
+        settings.type() == Optional.of("EXTERNAL_DEPENDENCY")
         settings.description() == Optional.of("Some check")
         settings.dependentOn() == Optional.of("some_service")
         settings.link() == Optional.of("www.google.com")
@@ -43,9 +43,9 @@ class ReflectiveHealthCheckSettingsExtractorSpec extends Specification {
         }
     }
 
-    @HealthCheckProperties(
+    @Settings(
             level = Level.WARNING,
-            type = Type.EXTERNAL_DEPENDENCY,
+            type = "EXTERNAL_DEPENDENCY",
             description = "Some check",
             dependentOn = "some_service",
             link = "www.google.com"

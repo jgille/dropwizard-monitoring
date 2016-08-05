@@ -42,8 +42,7 @@ class HealthCheckSpec extends Specification {
         and:
         healthy[2] == [
                 name: 'deadlocks',
-                status: 'HEALTHY',
-                type: 'SELF'
+                status: 'HEALTHY'
         ]
 
         and:
