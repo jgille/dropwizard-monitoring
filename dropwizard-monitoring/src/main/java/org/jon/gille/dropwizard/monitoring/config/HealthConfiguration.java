@@ -14,6 +14,7 @@ public class HealthConfiguration {
     @NotNull
     private ImmutableList<HealthReporterFactory> reporters = ImmutableList.of();
 
+    @NotNull
     private Duration defaultReportingFrequency = Duration.minutes(1);
 
     @JsonProperty
@@ -26,6 +27,7 @@ public class HealthConfiguration {
         this.reporters = reporters;
     }
 
+    @JsonProperty
     public Duration getDefaultReportingFrequency() {
         return defaultReportingFrequency;
     }
