@@ -6,7 +6,7 @@ This project contains a Dropwizard bundle that will extend the health checking f
 It adds a couple of features:
 
 * An endpoint on the admin port where you can get metadata about the service
-* A new health check endpoint where each health check contains more information than the original Dropwizard ones
+* A new health endpoint where each health check contains more information than the original Dropwizard ones
 * The possibility to report/push service health and metadata, similar to how metrics can be reported
 
 Additional information about the health checks
@@ -87,7 +87,7 @@ Example response:
 Reporting service health
 ------------------------
 
-Apart from proving endpoints which a monitoring tool can poll, you can also push service health and metadata on a regular basis. It works
+Apart from providing endpoints which a monitoring tool can poll, you can also push service health and metadata on a regular basis. It works
 pretty much the same way as the Dropwizard metrics reporters, you configure a list of reporters each having a frequency
 (how often to check health and report it).
 
