@@ -16,7 +16,7 @@ import static java.util.stream.Collectors.toList;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Produces(APPLICATION_JSON)
-@Path("healthcheck")
+@Path("health")
 public class HealthCheckResource {
 
     private final HealthCheckService healthCheckService;

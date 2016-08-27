@@ -59,6 +59,6 @@ class HealthCheckSpec extends Specification {
     }
 
     def checkHealth() {
-        client.get( path: '/service/healthcheck' ).data
+        client.get( path: '/service/health' ).data
     }
 }

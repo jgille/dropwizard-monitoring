@@ -21,11 +21,11 @@ With the bundle you can add more information that can be valuable when doing mon
 * description - An optional string describing the health check
 * dependent_on - An optional string with the name of the service this check depends on
 * link - An optional string linking to more information, perhaps to the status page of the service the check depends on
- 
+
 Health checks can be decorated with this information by adding an annotation on you health check class and/or by providing them
 explicitly when registering the health check.
 
-The endpoint host:adminPort/healthcheck will be behave as it always has, but host:adminPort/service/healthcheck
+The endpoint host:adminPort/healthcheck will be behave as it always has, but host:adminPort/service/health
 will return this extra information.
 
 The only thing you need to do to get this is to register your health checks in the bundle instead of directly in the Dropwizard
