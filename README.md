@@ -91,7 +91,7 @@ Apart from providing endpoints which a monitoring tool can poll, you can also pu
 pretty much the same way as the Dropwizard metrics reporters, you configure a list of reporters each having a frequency
 (how often to check health and report it).
 
-A simple console reporter and one that will push json with http is implemented, but you can also easily create your own reporter(s). Perhaps publishing to Kafka or sending events to Riemann?
+A simple console reporter and one that will push json via http (POST) is implemented, but you can also easily create your own reporter(s). Perhaps publishing to Kafka or sending events to Riemann?
 
 Caching health check results
 ----------------------------
