@@ -1,7 +1,6 @@
 package org.jon.gille.dropwizard.monitoring.health.domain;
 
 import org.jon.gille.dropwizard.monitoring.ValueObject;
-import org.jon.gille.dropwizard.monitoring.metadata.domain.ServiceMetadata;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -15,23 +14,19 @@ import static java.util.stream.Collectors.toList;
 public class ServiceHealth extends ValueObject {
 
     private final UUID id;
-    private final ServiceMetadata metadata;
+    private final Status status;
     private final List<HealthCheckResult> executedChecks;
     private final Instant timestamp;
 
-    public ServiceHealth(UUID id, ServiceMetadata metadata, List<HealthCheckResult> executedChecks, Instant timestamp) {
+    public ServiceHealth(UUID id, Status status, List<HealthCheckResult> executedChecks, Instant timestamp) {
         this.id = id;
-        this.metadata = metadata;
+        this.status = status;
         this.executedChecks = new ArrayList<>(executedChecks);
         this.timestamp = timestamp;
     }
 
     public UUID id() {
         return id;
-    }
-
-    public ServiceMetadata serviceMetadata() {
-        return metadata;
     }
 
     public List<HealthCheckResult> executedChecks() {
@@ -48,6 +43,10 @@ public class ServiceHealth extends ValueObject {
 
     public List<HealthCheckResult> executedChecks(Predicate<HealthCheckResult> filter) {
         return executedChecks.stream().filter(filter).collect(toList());
+    }
+
+    public Status status() {
+        return status;
     }
 
     public Instant timestamp() {

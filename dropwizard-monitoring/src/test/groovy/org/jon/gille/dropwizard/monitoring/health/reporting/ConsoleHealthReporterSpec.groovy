@@ -4,6 +4,7 @@ import com.codahale.metrics.health.HealthCheck
 import org.jon.gille.dropwizard.monitoring.health.domain.HealthCheckResult
 import org.jon.gille.dropwizard.monitoring.health.domain.HealthCheckSettings
 import org.jon.gille.dropwizard.monitoring.health.domain.ServiceHealth
+import org.jon.gille.dropwizard.monitoring.health.domain.Status
 import org.jon.gille.dropwizard.monitoring.metadata.domain.ServiceMetadata
 import spock.lang.Specification
 
@@ -27,10 +28,10 @@ class ConsoleHealthReporterSpec extends Specification {
         def timestamp = Instant.now()
         def id = UUID.randomUUID()
 
-        def serviceHealth = new ServiceHealth(id, serviceMetadata, executedChecks, timestamp)
+        def serviceHealth = new ServiceHealth(id, Status.HEALTHY, executedChecks, timestamp)
 
         when:
-        reporter.report(serviceHealth)
+        reporter.report(serviceMetadata, serviceHealth)
 
         then:
         stream.flush()
@@ -60,10 +61,10 @@ class ConsoleHealthReporterSpec extends Specification {
         def timestamp = Instant.now()
         def id = UUID.randomUUID()
 
-        def serviceHealth = new ServiceHealth(id, serviceMetadata, executedChecks, timestamp)
+        def serviceHealth = new ServiceHealth(id, Status.HEALTHY, executedChecks, timestamp)
 
         when:
-        reporter.report(serviceHealth)
+        reporter.report(serviceMetadata, serviceHealth)
 
         then:
         stream.flush()

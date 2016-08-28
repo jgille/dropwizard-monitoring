@@ -5,6 +5,7 @@ import org.jon.gille.dropwizard.monitoring.api.reporting.ServiceHealthReportDto;
 import org.jon.gille.dropwizard.monitoring.health.domain.ServiceHealth;
 import org.jon.gille.dropwizard.monitoring.health.reporting.ServiceHealthReporter;
 import org.jon.gille.dropwizard.monitoring.health.reporting.translation.ServiceHealthTranslator;
+import org.jon.gille.dropwizard.monitoring.metadata.domain.ServiceMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,8 +27,8 @@ class HttpPostHealthReporter implements ServiceHealthReporter, Managed {
     }
 
     @Override
-    public void report(ServiceHealth serviceHealth) {
-        ServiceHealthReportDto report = ServiceHealthTranslator.createReport(serviceHealth);
+    public void report(ServiceMetadata serviceMetadata, ServiceHealth serviceHealth) {
+        ServiceHealthReportDto report = ServiceHealthTranslator.createReport(serviceMetadata, serviceHealth);
         post(report);
     }
 

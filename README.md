@@ -35,7 +35,8 @@ Example response from the endpoint:
 
 <pre>
 {
-  "unhealthy": [
+  "status": "CRITICAL",
+  "health_checks": [
     {
       "name": "broken",
       "status": "CRITICAL",
@@ -43,9 +44,7 @@ Example response from the endpoint:
       "message": "Fail!",
       "error": "java.lang.RuntimeException: Fail!",
       "type": "SELF"
-    }
-  ],
-  "healthy": [
+    },
     {
       "name": "google_something",
       "status": "HEALTHY",

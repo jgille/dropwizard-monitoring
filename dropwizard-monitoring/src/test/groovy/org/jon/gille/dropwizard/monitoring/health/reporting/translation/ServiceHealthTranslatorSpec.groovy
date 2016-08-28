@@ -40,7 +40,7 @@ class ServiceHealthTranslatorSpec extends Specification {
 
         def serviceHealth = new ServiceHealth(
                 UUID.randomUUID(),
-                serviceMetadata,
+                Status.CRITICAL,
                 [
                         c1,
                         c2
@@ -49,7 +49,7 @@ class ServiceHealthTranslatorSpec extends Specification {
         )
 
         when:
-        def report = ServiceHealthTranslator.createReport(serviceHealth)
+        def report = ServiceHealthTranslator.createReport(serviceMetadata, serviceHealth)
 
         then:
         report.id == serviceHealth.id().toString()
@@ -70,19 +70,18 @@ class ServiceHealthTranslatorSpec extends Specification {
         report.metadata.instance.host_address == instanceMetadata.hostAddress()
 
         and:
-        report.health.unhealthy.size() == 1
-        def unhealthyCheck = report.health.unhealthy[0]
+        def checks = report.health.health_checks
+        checks.size() == 2
+        def unhealthyCheck = checks[0]
 
         and:
         compareHealthCheckResult(unhealthyCheck, c1)
 
         and:
-        report.health.healthy.size() == 1
-        def healthyCheck = report.health.healthy[0]
+        def healthyCheck = checks[1]
 
         and:
         compareHealthCheckResult(healthyCheck, c2)
-
     }
 
     def compareHealthCheckResult(HealthCheckResultDto translated, HealthCheckResult source) {

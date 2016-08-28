@@ -18,14 +18,25 @@ class HealthCheckSpec extends Specification {
         when:
         def health = checkHealth()
 
-        def healthy = health.healthy as List
-        def unhealthy = health.unhealthy as List
-
         then:
-        healthy.size == 3
+        health.status == 'CRITICAL'
 
         and:
-        healthy[0] == [
+        def checks = health.health_checks as List
+        checks.size == 4
+
+        and:
+        checks[0] == [
+                name: 'broken',
+                status: 'CRITICAL',
+                type: 'SELF',
+                message: 'Fail!',
+                error: 'java.lang.RuntimeException: Fail!',
+                description: 'I will always fail'
+        ]
+
+        and:
+        checks[1] == [
                 name: 'annotated',
                 status: 'HEALTHY',
                 type: 'EXTERNAL_DEPENDENCY',
@@ -34,28 +45,17 @@ class HealthCheckSpec extends Specification {
         ]
 
         and:
-        healthy[1].name == 'cached'
+        checks[2].name == 'cached'
 
         and:
-        healthy[1].status == 'HEALTHY'
+        checks[2].status == 'HEALTHY'
 
         and:
-        healthy[2] == [
+        checks[3] == [
                 name: 'deadlocks',
                 status: 'HEALTHY'
         ]
 
-        and:
-        unhealthy == [
-                [
-                        name: 'broken',
-                        status: 'CRITICAL',
-                        type: 'SELF',
-                        message: 'Fail!',
-                        error: 'java.lang.RuntimeException: Fail!',
-                        description: 'I will always fail'
-                ]
-        ]
     }
 
     def checkHealth() {

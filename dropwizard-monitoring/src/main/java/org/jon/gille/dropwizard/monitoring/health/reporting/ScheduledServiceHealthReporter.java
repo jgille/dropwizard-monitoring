@@ -2,16 +2,12 @@ package org.jon.gille.dropwizard.monitoring.health.reporting;
 
 import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.util.Duration;
-import org.jon.gille.dropwizard.monitoring.health.domain.HealthCheckResult;
 import org.jon.gille.dropwizard.monitoring.health.domain.HealthCheckService;
 import org.jon.gille.dropwizard.monitoring.health.domain.ServiceHealth;
 import org.jon.gille.dropwizard.monitoring.metadata.domain.ServiceMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.Instant;
-import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -41,10 +37,8 @@ public class ScheduledServiceHealthReporter implements Managed {
 
     private void reportSafely() {
         try {
-            List<HealthCheckResult> executedChecks = healthCheckService.runHealthChecks();
-            ServiceHealth serviceHealth =
-                    new ServiceHealth(UUID.randomUUID(), serviceMetadata, executedChecks, Instant.now());
-            reporter.report(serviceHealth);
+            ServiceHealth serviceHealth = healthCheckService.runHealthChecks();
+            reporter.report(serviceMetadata, serviceHealth);
         } catch (Exception e) {
             logger.warn("Failed to report service health", e);
         }

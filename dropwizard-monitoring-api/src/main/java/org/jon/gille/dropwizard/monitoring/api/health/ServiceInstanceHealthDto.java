@@ -1,6 +1,7 @@
 package org.jon.gille.dropwizard.monitoring.api.health;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.NotBlank;
 import org.jon.gille.dropwizard.monitoring.api.Dto;
 
 import javax.validation.Valid;
@@ -9,17 +10,16 @@ import java.util.List;
 
 public class ServiceInstanceHealthDto extends Dto {
 
-    @NotNull
-    @Valid
-    public final List<HealthCheckResultDto> unhealthy;
+    @NotBlank
+    public final String status;
 
     @NotNull
     @Valid
-    public final List<HealthCheckResultDto> healthy;
+    public final List<HealthCheckResultDto> health_checks;
 
-    public ServiceInstanceHealthDto(@JsonProperty("unhealthy") List<HealthCheckResultDto> unhealthy,
-                                    @JsonProperty("healthy") List<HealthCheckResultDto> healthy) {
-        this.unhealthy = unhealthy;
-        this.healthy = healthy;
+    public ServiceInstanceHealthDto(@JsonProperty("status") String status,
+                                    @JsonProperty("health_checks") List<HealthCheckResultDto> health_checks) {
+        this.status = status;
+        this.health_checks = health_checks;
     }
 }

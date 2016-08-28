@@ -2,6 +2,7 @@ package org.jon.gille.dropwizard.monitoring.health.reporting;
 
 import org.jon.gille.dropwizard.monitoring.health.domain.HealthCheckResult;
 import org.jon.gille.dropwizard.monitoring.health.domain.ServiceHealth;
+import org.jon.gille.dropwizard.monitoring.metadata.domain.ServiceMetadata;
 
 import java.io.PrintStream;
 import java.util.List;
@@ -19,13 +20,13 @@ class ConsoleHealthReporter implements ServiceHealthReporter {
     }
 
     @Override
-    public void report(ServiceHealth serviceHealth) {
+    public void report(ServiceMetadata serviceMetadata, ServiceHealth serviceHealth) {
 
         List<HealthCheckResult> healthyChecks = serviceHealth.healthyChecks();
         List<HealthCheckResult> unhealthyChecks = serviceHealth.unhealthyChecks();
 
         out.println();
-        out.printf("--- %s Service Health ---", serviceHealth.serviceMetadata().serviceName().name());
+        out.printf("--- %s Service Health ---", serviceMetadata.serviceName().name());
         out.println();
         out.printf("%d unhealthy checks, %d healthy checks", unhealthyChecks.size(), healthyChecks.size());
         out.println();

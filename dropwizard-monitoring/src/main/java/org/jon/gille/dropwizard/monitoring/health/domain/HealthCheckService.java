@@ -2,7 +2,6 @@ package org.jon.gille.dropwizard.monitoring.health.domain;
 
 import com.codahale.metrics.health.HealthCheck;
 
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 public interface HealthCheckService {
@@ -15,7 +14,7 @@ public interface HealthCheckService {
 
     HealthCheckResult runHealthCheck(String name);
 
-    List<HealthCheckResult> runHealthChecks();
+    ServiceHealth runHealthChecks();
 
-    List<HealthCheckResult> runHealthChecksConcurrently(ExecutorService executor);
+    ServiceHealth runHealthChecksConcurrently(ExecutorService executor);
 }

@@ -4,6 +4,7 @@ import org.jon.gille.dropwizard.monitoring.api.health.HealthCheckResultDto;
 import org.jon.gille.dropwizard.monitoring.api.health.ServiceInstanceHealthDto;
 import org.jon.gille.dropwizard.monitoring.health.domain.HealthCheckResult;
 import org.jon.gille.dropwizard.monitoring.health.domain.HealthCheckService;
+import org.jon.gille.dropwizard.monitoring.health.domain.ServiceHealth;
 import org.jon.gille.dropwizard.monitoring.health.translation.api.HealthCheckResultTranslator;
 
 import javax.ws.rs.GET;
@@ -29,11 +30,8 @@ public class HealthCheckResource {
 
     @GET
     public ServiceInstanceHealthDto runHealthChecks() {
-        List<HealthCheckResult> results = healthCheckService.runHealthChecks();
-        Stream<HealthCheckResult> unhealthy = results.stream().filter(HealthCheckResult::isUnhealthy);
-        Stream<HealthCheckResult> healthy = results.stream().filter(HealthCheckResult::isHealthy);
-
-        return new ServiceInstanceHealthDto(mapToDtos(unhealthy), mapToDtos(healthy));
+        ServiceHealth serviceHealth = healthCheckService.runHealthChecks();
+        return new ServiceInstanceHealthDto(serviceHealth.status().name(), mapToDtos(serviceHealth.executedChecks().stream()));
     }
 
     private List<HealthCheckResultDto> mapToDtos(Stream<HealthCheckResult> checks) {

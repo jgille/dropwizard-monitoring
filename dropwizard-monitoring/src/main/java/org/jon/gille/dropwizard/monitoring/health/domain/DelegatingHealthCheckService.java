@@ -7,9 +7,11 @@ import org.jon.gille.dropwizard.monitoring.health.HealthCheckSettingsExtractor;
 import org.jon.gille.dropwizard.monitoring.health.reflection.OptionallyCacheHealthCheckResult;
 import org.jon.gille.dropwizard.monitoring.health.reflection.ReflectiveHealthCheckSettingsExtractor;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 
 import static java.util.stream.Collectors.toList;
@@ -20,6 +22,8 @@ public class DelegatingHealthCheckService implements HealthCheckService {
     private final HealthCheckSettingsRegistry settingsRegistry;
     private final HealthCheckSettingsExtractor settingsExtractor;
     private final HealthCheckDecorator healthCheckDecorator;
+
+    private static final HealthCheckResultComparator HEALTH_CHECK_RESULT_COMPARATOR = new HealthCheckResultComparator();
 
     public DelegatingHealthCheckService(HealthCheckRegistry healthCheckRegistry) {
         this(healthCheckRegistry, new HealthCheckSettingsRegistry(), new ReflectiveHealthCheckSettingsExtractor(),
@@ -62,15 +66,15 @@ public class DelegatingHealthCheckService implements HealthCheckService {
     }
 
     @Override
-    public List<HealthCheckResult> runHealthChecks() {
+    public ServiceHealth runHealthChecks() {
         SortedMap<String, HealthCheck.Result> results = healthCheckRegistry.runHealthChecks();
-        return mapToHealthCheckResults(results);
+        return mapToServiceHealth(results);
     }
 
     @Override
-    public List<HealthCheckResult> runHealthChecksConcurrently(ExecutorService executor) {
+    public ServiceHealth runHealthChecksConcurrently(ExecutorService executor) {
         SortedMap<String, HealthCheck.Result> results = healthCheckRegistry.runHealthChecks(executor);
-        return mapToHealthCheckResults(results);
+        return mapToServiceHealth(results);
     }
 
     private void registerHealthCheckAndSettings(String name, HealthCheck healthCheck, HealthCheckSettings settings) {
@@ -87,10 +91,18 @@ public class DelegatingHealthCheckService implements HealthCheckService {
         return new HealthCheckResult(name, settings, result);
     }
 
-    private List<HealthCheckResult> mapToHealthCheckResults(SortedMap<String, HealthCheck.Result> results) {
-        return results.entrySet().stream()
+    private ServiceHealth mapToServiceHealth(SortedMap<String, HealthCheck.Result> results) {
+        List<HealthCheckResult> executedChecks = results.entrySet().stream()
                 .map(this::mapToHealthCheckResult)
+                .sorted(HEALTH_CHECK_RESULT_COMPARATOR)
                 .collect(toList());
+        Status status = aggregateHealth(executedChecks);
+        return new ServiceHealth(UUID.randomUUID(), status, executedChecks, Instant.now());
+    }
+
+    private Status aggregateHealth(List<HealthCheckResult> executedChecks) {
+        // TODO: Make it possible to customize this
+        return executedChecks.stream().findFirst().map(HealthCheckResult::status).orElse(Status.HEALTHY);
     }
 
     private HealthCheckResult mapToHealthCheckResult(Map.Entry<String, HealthCheck.Result> entry) {

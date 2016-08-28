@@ -167,16 +167,20 @@ class DelegatingHealthCheckServiceSpec extends Specification {
         service.registerHealthCheck(checkTwo, check)
 
         when:
-        def results = service.runHealthChecks()
+        def serviceHealth = service.runHealthChecks()
 
         then:
-        results.size() == 2
+        serviceHealth.status() == Status.HEALTHY
 
         and:
-        results[0] == new HealthCheckResult(checkOne, settings, HealthCheck.Result.healthy(messageOne))
+        def executedChecks = serviceHealth.executedChecks()
+        executedChecks.size() == 2
 
         and:
-        results[1] == new HealthCheckResult(checkTwo, HealthCheckSettings.DEFAULT_SETTINGS,
+        executedChecks[0] == new HealthCheckResult(checkOne, settings, HealthCheck.Result.healthy(messageOne))
+
+        and:
+        executedChecks[1] == new HealthCheckResult(checkTwo, HealthCheckSettings.DEFAULT_SETTINGS,
                 HealthCheck.Result.healthy(messageTwo))
     }
 
@@ -205,16 +209,17 @@ class DelegatingHealthCheckServiceSpec extends Specification {
         service.registerHealthCheck(checkTwo, check)
 
         when:
-        def results = service.runHealthChecksConcurrently(executor)
+        def serviceHealth = service.runHealthChecksConcurrently(executor)
 
         then:
-        results.size() == 2
+        serviceHealth.status() == Status.HEALTHY
 
         and:
-        results[0] == new HealthCheckResult(checkOne, settings, HealthCheck.Result.healthy(messageOne))
+        def executedChecks = serviceHealth.executedChecks()
+        executedChecks[0] == new HealthCheckResult(checkOne, settings, HealthCheck.Result.healthy(messageOne))
 
         and:
-        results[1] == new HealthCheckResult(checkTwo, HealthCheckSettings.DEFAULT_SETTINGS,
+        executedChecks[1] == new HealthCheckResult(checkTwo, HealthCheckSettings.DEFAULT_SETTINGS,
                 HealthCheck.Result.healthy(messageTwo))
     }
 

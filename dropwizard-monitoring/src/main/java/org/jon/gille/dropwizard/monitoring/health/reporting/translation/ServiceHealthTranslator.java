@@ -19,9 +19,9 @@ import static java.util.stream.Collectors.toList;
 
 public class ServiceHealthTranslator {
 
-    public static ServiceHealthReportDto createReport(ServiceHealth serviceHealth) {
-        MetadataDto metadataDto = translate(serviceHealth.serviceMetadata());
-        ServiceInstanceHealthDto serviceInstanceHealthDto = translate(serviceHealth.executedChecks());
+    public static ServiceHealthReportDto createReport(ServiceMetadata serviceMetadata, ServiceHealth serviceHealth) {
+        MetadataDto metadataDto = translate(serviceMetadata);
+        ServiceInstanceHealthDto serviceInstanceHealthDto = translate(serviceHealth);
 
         return new ServiceHealthReportDto(
                 serviceHealth.id().toString(),
@@ -39,11 +39,9 @@ public class ServiceHealthTranslator {
         );
     }
 
-    private static ServiceInstanceHealthDto translate(List<HealthCheckResult> executedChecks) {
-        Stream<HealthCheckResult> unhealthy = executedChecks.stream().filter(HealthCheckResult::isUnhealthy);
-        Stream<HealthCheckResult> healthy = executedChecks.stream().filter(HealthCheckResult::isHealthy);
-
-        return new ServiceInstanceHealthDto(translate(unhealthy), translate(healthy));
+    private static ServiceInstanceHealthDto translate(ServiceHealth serviceHealth) {
+        return new ServiceInstanceHealthDto(serviceHealth.status().name(),
+                translate(serviceHealth.executedChecks().stream()));
     }
 
     private static List<HealthCheckResultDto> translate(Stream<HealthCheckResult> checks) {
