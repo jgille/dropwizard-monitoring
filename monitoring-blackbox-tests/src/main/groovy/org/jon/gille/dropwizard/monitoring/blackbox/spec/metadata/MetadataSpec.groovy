@@ -29,9 +29,6 @@ class MetadataSpec extends Specification {
         instance != null
 
         and:
-        service.service_id == 'sample_app'
-
-        and:
         service.service_name == 'Sample App'
 
         and:

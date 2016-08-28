@@ -4,7 +4,6 @@ import com.jcabi.manifests.Manifests;
 
 public final class ServiceManifestEntries {
 
-    private static final String SERVICE_ID = "Service-Id";
     private static final String SERVICE_VERSION = "Service-Version";
     private static final String NOT_AVAILABLE = "N/A";
 
@@ -19,11 +18,7 @@ public final class ServiceManifestEntries {
         }
     }
 
-    public static String serviceId(String defaultId) {
-        return value(SERVICE_ID, defaultId);
-    }
-
-    public static String serviceVersion() {
+    static String serviceVersion() {
         return value(SERVICE_VERSION, NOT_AVAILABLE);
     }
 }

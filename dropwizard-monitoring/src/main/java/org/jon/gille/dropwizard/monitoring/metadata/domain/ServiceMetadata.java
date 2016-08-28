@@ -2,20 +2,14 @@ package org.jon.gille.dropwizard.monitoring.metadata.domain;
 
 public class ServiceMetadata {
 
-    private final ServiceId serviceId;
     private final ServiceName serviceName;
     private final ServiceVersion serviceVersion;
     private final InstanceMetadata instanceMetadata;
 
-    public ServiceMetadata(Builder builder) {
-        this.serviceId = new ServiceId(builder.serviceId);
+    private ServiceMetadata(Builder builder) {
         this.serviceName = new ServiceName(builder.serviceName);
         this.serviceVersion = new ServiceVersion(builder.serviceVersion);
         this.instanceMetadata = new InstanceMetadata(new InstanceId(builder.instanceId), builder.hostAddress);
-    }
-
-    public ServiceId serviceId() {
-        return serviceId;
     }
 
     public ServiceName serviceName() {
@@ -35,16 +29,10 @@ public class ServiceMetadata {
     }
 
     public static class Builder {
-        private String serviceId;
         private String serviceName;
         private String serviceVersion;
         private String instanceId;
         private String hostAddress;
-
-        public Builder withServiceId(String serviceId) {
-            this.serviceId = serviceId;
-            return this;
-        }
 
         public Builder withServiceName(String serviceName) {
             this.serviceName = serviceName;

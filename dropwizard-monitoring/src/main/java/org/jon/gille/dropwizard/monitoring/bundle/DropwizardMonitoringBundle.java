@@ -52,7 +52,6 @@ public class DropwizardMonitoringBundle<C extends DropwizardMonitoringConfigurat
         String name = environment.getName();
 
         ServiceMetadata serviceMetadata = ServiceMetadata.builder()
-                .withServiceId(ServiceManifestEntries.serviceId(name))
                 .withServiceName(name)
                 .withServiceVersion(ServiceManifestEntries.serviceVersion())
                 .withInstanceId(instanceId)

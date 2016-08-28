@@ -18,7 +18,7 @@ class ConsoleHealthReporterSpec extends Specification {
         def reporter = new ConsoleHealthReporter(stream)
 
         def serviceMetadata = ServiceMetadata.builder()
-                .withServiceId("sid").withServiceName("My App").withServiceVersion("1.0")
+                .withServiceName("My App").withServiceVersion("1.0")
                 .withInstanceId("i1").withHostAddress("127.0.0.1").build()
         def executedChecks = [
                 new HealthCheckResult("check", HealthCheckSettings.DEFAULT_SETTINGS,
@@ -51,7 +51,7 @@ class ConsoleHealthReporterSpec extends Specification {
         def reporter = new ConsoleHealthReporter(stream)
 
         def serviceMetadata = ServiceMetadata.builder()
-                .withServiceId("sid").withServiceName("My App").withServiceVersion("1.0")
+                .withServiceName("My App").withServiceVersion("1.0")
                 .withInstanceId("i1").withHostAddress("127.0.0.1").build()
         def executedChecks = [
                 new HealthCheckResult("check", HealthCheckSettings.DEFAULT_SETTINGS,

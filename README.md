@@ -73,7 +73,6 @@ Example response:
 <pre>
 {
   "service": {
-    "service_id": "sample_app",
     "service_name": "Sample App",
     "service_version": "1.0-SNAPSHOT"
   },

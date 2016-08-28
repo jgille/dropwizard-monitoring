@@ -15,7 +15,6 @@ class ServiceHealthTranslatorSpec extends Specification {
         given:
 
         def serviceMetadata = ServiceMetadata.builder()
-                .withServiceId("sid")
                 .withServiceName("Service")
                 .withServiceVersion("1.0")
                 .withInstanceId("i1")
@@ -57,9 +56,6 @@ class ServiceHealthTranslatorSpec extends Specification {
 
         and:
         report.timestamp == serviceHealth.timestamp().atOffset(ZoneOffset.UTC)
-
-        and:
-        report.metadata.service.service_id == serviceMetadata.serviceId().id()
 
         and:
         report.metadata.service.service_name == serviceMetadata.serviceName().name()
