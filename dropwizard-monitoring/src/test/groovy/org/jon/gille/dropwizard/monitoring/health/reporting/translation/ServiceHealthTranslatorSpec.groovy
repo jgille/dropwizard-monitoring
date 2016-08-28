@@ -58,13 +58,13 @@ class ServiceHealthTranslatorSpec extends Specification {
         report.timestamp == serviceHealth.timestamp().atOffset(ZoneOffset.UTC)
 
         and:
-        report.metadata.service.service_name == serviceMetadata.serviceName().name()
+        report.metadata.service.name == serviceMetadata.serviceName().name()
 
         and:
-        report.metadata.service.service_version == serviceMetadata.serviceVersion().version()
+        report.metadata.service.version == serviceMetadata.serviceVersion().version()
 
         and:
-        report.metadata.instance.instance_id == instanceMetadata.instanceId().id()
+        report.metadata.instance.id == instanceMetadata.instanceId().id()
 
         and:
         report.metadata.instance.host_address == instanceMetadata.hostAddress()

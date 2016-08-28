@@ -72,11 +72,11 @@ Example response:
 <pre>
 {
   "service": {
-    "service_name": "Sample App",
-    "service_version": "1.0-SNAPSHOT"
+    "name": "Sample App",
+    "version": "1.0-SNAPSHOT"
   },
   "instance": {
-    "instance_id": "d32501e364c0",
+    "id": "d32501e364c0",
     "host_address": "172.17.2.61"
   }
 }

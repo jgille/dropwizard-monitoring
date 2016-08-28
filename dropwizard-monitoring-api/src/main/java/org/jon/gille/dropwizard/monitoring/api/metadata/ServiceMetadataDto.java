@@ -7,14 +7,14 @@ import org.jon.gille.dropwizard.monitoring.api.Dto;
 public class ServiceMetadataDto extends Dto {
 
     @NotBlank
-    public final String service_name;
+    public final String name;
 
     @NotBlank
-    public final String service_version;
+    public final String version;
 
-    public ServiceMetadataDto(@JsonProperty("service_name") String serviceName,
-                              @JsonProperty("service_version") String serviceVersion) {
-        this.service_name = serviceName;
-        this.service_version = serviceVersion;
+    public ServiceMetadataDto(@JsonProperty("name") String serviceName,
+                              @JsonProperty("version") String serviceVersion) {
+        this.name = serviceName;
+        this.version = serviceVersion;
     }
 }

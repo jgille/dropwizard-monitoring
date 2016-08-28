@@ -44,7 +44,7 @@ public class InMemoryMonitorResource {
     @Path("{service_name}")
     public ServiceHealthReportDto currentHealth(@PathParam("service_name") String serviceName) {
         List<ServiceHealthReportDto> copy = copyReports();
-        return copy.stream().filter(r -> serviceName.equals(r.metadata.service.service_name)).findFirst()
+        return copy.stream().filter(r -> serviceName.equals(r.metadata.service.name)).findFirst()
                 .orElseThrow(() -> new WebApplicationException(Response.Status.NOT_FOUND));
     }
 
@@ -58,6 +58,5 @@ public class InMemoryMonitorResource {
         }
         reports.addFirst(report);
     }
-
 
 }
