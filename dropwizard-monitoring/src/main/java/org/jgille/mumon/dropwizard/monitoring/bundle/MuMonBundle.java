@@ -16,7 +16,7 @@ import org.jgille.mumon.dropwizard.monitoring.health.reporting.ScheduledServiceH
 import org.jgille.mumon.dropwizard.monitoring.health.resource.HealthCheckResource;
 import org.jgille.mumon.dropwizard.monitoring.metadata.domain.LocalHostInstanceMetadataProvider;
 import org.jgille.mumon.dropwizard.monitoring.metadata.domain.ServiceMetadata;
-import org.jgille.mumon.dropwizard.monitoring.config.DropwizardMonitoringConfiguration;
+import org.jgille.mumon.dropwizard.monitoring.config.MuMonConfiguration;
 import org.jgille.mumon.dropwizard.monitoring.health.domain.DelegatingHealthCheckService;
 import org.jgille.mumon.dropwizard.monitoring.health.domain.HealthCheckService;
 import org.jgille.mumon.dropwizard.monitoring.health.domain.HealthCheckSettings;
@@ -27,18 +27,18 @@ import org.jgille.mumon.dropwizard.monitoring.metadata.resource.ServiceMetadataR
 
 import java.util.concurrent.ScheduledExecutorService;
 
-public class DropwizardMonitoringBundle<C extends DropwizardMonitoringConfiguration> implements ConfiguredBundle<C> {
+public class MuMonBundle<C extends MuMonConfiguration> implements ConfiguredBundle<C> {
 
     private final String instanceId;
     private final String hostAddress;
 
     private HealthCheckService healthCheckService;
 
-    public DropwizardMonitoringBundle() {
+    public MuMonBundle() {
         this(new LocalHostInstanceMetadataProvider());
     }
 
-    public DropwizardMonitoringBundle(InstanceMetadataProvider instanceMetadataProvider) {
+    public MuMonBundle(InstanceMetadataProvider instanceMetadataProvider) {
         this.instanceId = instanceMetadataProvider.instanceId();
         this.hostAddress = instanceMetadataProvider.hostAddress();
     }

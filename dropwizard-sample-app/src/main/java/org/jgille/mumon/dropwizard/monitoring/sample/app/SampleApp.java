@@ -3,7 +3,7 @@ package org.jgille.mumon.dropwizard.monitoring.sample.app;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import org.jgille.mumon.dropwizard.monitoring.bundle.DropwizardMonitoringBundle;
+import org.jgille.mumon.dropwizard.monitoring.bundle.MuMonBundle;
 import org.jgille.mumon.dropwizard.monitoring.health.domain.HealthCheckSettings;
 import org.jgille.mumon.dropwizard.monitoring.health.domain.Level;
 import org.jgille.mumon.dropwizard.monitoring.sample.app.health.AnnotatedHealthCheck;
@@ -12,8 +12,8 @@ import org.jgille.mumon.dropwizard.monitoring.sample.app.health.UnhealthyHealthC
 
 public class SampleApp extends Application<SampleConfiguration> {
 
-    private final DropwizardMonitoringBundle<SampleConfiguration> monitoringBundle =
-            new DropwizardMonitoringBundle<>();
+    private final MuMonBundle<SampleConfiguration> monitoringBundle =
+            new MuMonBundle<>();
 
     @Override
     public void initialize(Bootstrap<SampleConfiguration> bootstrap) {
