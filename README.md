@@ -1,7 +1,7 @@
 µMon Dropwizard
 =====================
 
-This project contains a Dropwizard bundle that will extend the health checking functionality of Dropwizard.
+This project contains a Dropwizard bundle that will extend the health checking functionality of Dropwizard. It's written for Dropwizard 1.0.0.
 
 It adds a couple of features:
 
