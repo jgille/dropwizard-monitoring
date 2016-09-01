@@ -73,7 +73,7 @@ Example response:
 {
   "service": {
     "name": "Sample App",
-    "version": "1.0-SNAPSHOT"
+    "version": "0.1.0-SNAPSHOT"
   },
   "instance": {
     "id": "d32501e364c0",
