@@ -1,4 +1,4 @@
-Dropwizard Monitoring
+µMon Dropwizard
 =====================
 
 This project contains a Dropwizard bundle that will extend the health checking functionality of Dropwizard.
@@ -22,7 +22,7 @@ With the bundle you can add more information that can be valuable when doing mon
 * dependent_on - An optional string with the name of the service this check depends on
 * link - An optional string linking to more information, perhaps to the status page of the service the check depends on
 
-Health checks can be decorated with this information by adding an annotation on you health check class and/or by providing them
+Health checks can be decorated with this information by adding an annotation on your health check class and/or by providing them
 explicitly when registering the health check.
 
 The endpoint host:adminPort/healthcheck will be behave as it always has, but host:adminPort/service/health
@@ -100,7 +100,7 @@ on your health class.
 Usage
 -----
 
-Documentation needed, but have a look in the sample-app module.
+Documentation needed, but have a look in the dropwizard-sample-app module.
 
 Building and testing
 --------------------
