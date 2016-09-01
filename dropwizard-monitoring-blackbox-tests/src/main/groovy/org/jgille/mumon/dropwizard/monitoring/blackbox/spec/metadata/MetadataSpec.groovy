@@ -39,6 +39,12 @@ class MetadataSpec extends Specification {
 
         and:
         instance.host_address != null
+
+        and:
+        metadata.additional_metadata == [
+                key: 'value',
+                otherKey: 'otherValue'
+        ]
     }
 
     def getMetadata() {

@@ -5,4 +5,5 @@ public interface MuMonConfiguration {
     default HealthConfiguration getHealth() {
         return new HealthConfiguration();
     }
+
 }

@@ -73,9 +73,9 @@ stop() {
 
 build() {
     cd ${PROJECT_DIR}
-    docker build -t ${MONITORED_SERVICE}:${VERSION} -f ${PROJECT_DIR}/sample-app/Dockerfile ${PROJECT_DIR}/sample-app
+    docker build -t ${MONITORED_SERVICE}:${VERSION} -f ${PROJECT_DIR}/dropwizard-sample-app/Dockerfile ${PROJECT_DIR}/dropwizard-sample-app
     docker build -t ${MONITOR}:${VERSION} -f ${PROJECT_DIR}/sample-monitor/Dockerfile ${PROJECT_DIR}/sample-monitor
-    docker build -t ${BLACKBOX_TESTS}:${VERSION} -f ${PROJECT_DIR}/monitoring-blackbox-tests/Dockerfile ${PROJECT_DIR}/monitoring-blackbox-tests
+    docker build -t ${BLACKBOX_TESTS}:${VERSION} -f ${PROJECT_DIR}/dropwizard-monitoring-blackbox-tests/Dockerfile ${PROJECT_DIR}/dropwizard-monitoring-blackbox-tests
 }
 
 get_logs () {

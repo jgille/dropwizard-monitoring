@@ -10,10 +10,15 @@ import org.jgille.mumon.dropwizard.monitoring.sample.app.health.AnnotatedHealthC
 import org.jgille.mumon.dropwizard.monitoring.sample.app.health.CachingHealthCheck;
 import org.jgille.mumon.dropwizard.monitoring.sample.app.health.UnhealthyHealthCheck;
 
+import java.util.Collections;
+
 public class SampleApp extends Application<SampleConfiguration> {
 
     private final MuMonBundle<SampleConfiguration> monitoringBundle =
-            new MuMonBundle<>();
+            new MuMonBundle.Builder<SampleConfiguration>()
+                    .addServiceMetadataProvider(c -> Collections.singletonMap("key", "value"))
+                    .addServiceMetadataProvider(c -> Collections.singletonMap("otherKey", "otherValue"))
+                    .build();
 
     @Override
     public void initialize(Bootstrap<SampleConfiguration> bootstrap) {

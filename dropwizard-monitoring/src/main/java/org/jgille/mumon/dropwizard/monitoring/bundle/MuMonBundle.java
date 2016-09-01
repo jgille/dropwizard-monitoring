@@ -11,20 +11,22 @@ import io.dropwizard.setup.Environment;
 import io.dropwizard.util.Duration;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.jgille.mumon.dropwizard.monitoring.config.HealthConfiguration;
-import org.jgille.mumon.dropwizard.monitoring.health.domain.Level;
-import org.jgille.mumon.dropwizard.monitoring.health.reporting.ScheduledServiceHealthReporter;
-import org.jgille.mumon.dropwizard.monitoring.health.resource.HealthCheckResource;
-import org.jgille.mumon.dropwizard.monitoring.metadata.domain.LocalHostInstanceMetadataProvider;
-import org.jgille.mumon.dropwizard.monitoring.metadata.domain.ServiceMetadata;
 import org.jgille.mumon.dropwizard.monitoring.config.MuMonConfiguration;
 import org.jgille.mumon.dropwizard.monitoring.health.domain.DelegatingHealthCheckService;
 import org.jgille.mumon.dropwizard.monitoring.health.domain.HealthCheckService;
 import org.jgille.mumon.dropwizard.monitoring.health.domain.HealthCheckSettings;
+import org.jgille.mumon.dropwizard.monitoring.health.domain.Level;
 import org.jgille.mumon.dropwizard.monitoring.health.reporting.HealthReporterFactory;
+import org.jgille.mumon.dropwizard.monitoring.health.reporting.ScheduledServiceHealthReporter;
 import org.jgille.mumon.dropwizard.monitoring.health.reporting.ServiceHealthReporter;
+import org.jgille.mumon.dropwizard.monitoring.health.resource.HealthCheckResource;
 import org.jgille.mumon.dropwizard.monitoring.metadata.domain.InstanceMetadataProvider;
+import org.jgille.mumon.dropwizard.monitoring.metadata.domain.LocalHostInstanceMetadataProvider;
+import org.jgille.mumon.dropwizard.monitoring.metadata.domain.ServiceMetadata;
+import org.jgille.mumon.dropwizard.monitoring.metadata.domain.ServiceMetadataProvider;
 import org.jgille.mumon.dropwizard.monitoring.metadata.resource.ServiceMetadataResource;
 
+import java.util.*;
 import java.util.concurrent.ScheduledExecutorService;
 
 public class MuMonBundle<C extends MuMonConfiguration> implements ConfiguredBundle<C> {
@@ -32,15 +34,14 @@ public class MuMonBundle<C extends MuMonConfiguration> implements ConfiguredBund
     private final String instanceId;
     private final String hostAddress;
 
+    private final List<ServiceMetadataProvider<C>> serviceMetadataProviders;
     private HealthCheckService healthCheckService;
 
-    public MuMonBundle() {
-        this(new LocalHostInstanceMetadataProvider());
-    }
-
-    public MuMonBundle(InstanceMetadataProvider instanceMetadataProvider) {
+    private MuMonBundle(InstanceMetadataProvider instanceMetadataProvider,
+                        List<ServiceMetadataProvider<C>> serviceMetadataProviders) {
         this.instanceId = instanceMetadataProvider.instanceId();
         this.hostAddress = instanceMetadataProvider.hostAddress();
+        this.serviceMetadataProviders = serviceMetadataProviders;
     }
 
     @Override
@@ -51,11 +52,15 @@ public class MuMonBundle<C extends MuMonConfiguration> implements ConfiguredBund
 
         String name = environment.getName();
 
+        Map<String, Object> additionalMetadata = new LinkedHashMap<>();
+        serviceMetadataProviders.forEach(p -> additionalMetadata.putAll(p.metadata(configuration)));
+
         ServiceMetadata serviceMetadata = ServiceMetadata.builder()
                 .withServiceName(name)
                 .withServiceVersion(ServiceManifestEntries.serviceVersion())
                 .withInstanceId(instanceId)
                 .withHostAddress(hostAddress)
+                .withAdditionalMetadata(additionalMetadata)
                 .build();
 
         registerResources(environment, "/service/*", serviceMetadata);
@@ -76,7 +81,7 @@ public class MuMonBundle<C extends MuMonConfiguration> implements ConfiguredBund
             Duration frequency = reporterFactory.getFrequency().orElse(health.getDefaultReportingFrequency());
             ScheduledExecutorService scheduler =
                     environment.lifecycle().scheduledExecutorService(reporterFactory.getName())
-                    .threads(1).build();
+                            .threads(1).build();
             ServiceHealthReporter reporter = reporterFactory.build();
             ScheduledServiceHealthReporter scheduledReporter =
                     new ScheduledServiceHealthReporter(serviceMetadata, healthCheckService, scheduler,
@@ -111,6 +116,26 @@ public class MuMonBundle<C extends MuMonConfiguration> implements ConfiguredBund
         resourceConfig.register(new ServiceMetadataResource(serviceMetadata));
         environment.admin().addServlet("health check resources", jerseyContainerHolder.getContainer())
                 .addMapping(resourcePath);
+    }
+
+    public static class Builder<C extends MuMonConfiguration> {
+
+        private InstanceMetadataProvider instanceMetadataProvider = new LocalHostInstanceMetadataProvider();
+        private final List<ServiceMetadataProvider<C>> serviceMetadataProviders = new ArrayList<>();
+
+        public Builder<C> withInstanceMetadataProvider(InstanceMetadataProvider instanceMetadataProvider) {
+            this.instanceMetadataProvider = instanceMetadataProvider;
+            return this;
+        }
+
+        public Builder<C> addServiceMetadataProvider(ServiceMetadataProvider<C> serviceMetadataProvider) {
+            serviceMetadataProviders.add(serviceMetadataProvider);
+            return this;
+        }
+
+        public MuMonBundle<C> build() {
+            return new MuMonBundle<>(instanceMetadataProvider, serviceMetadataProviders);
+        }
     }
 
 }

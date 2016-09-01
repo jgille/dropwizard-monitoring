@@ -35,8 +35,8 @@ public class ServiceHealthTranslator {
                 new ServiceMetadataDto(serviceMetadata.serviceName().name(),
                         serviceMetadata.serviceVersion().version()),
                 new InstanceMetadataDto(serviceMetadata.instanceMetadata().instanceId().id(),
-                        serviceMetadata.instanceMetadata().hostAddress())
-        );
+                        serviceMetadata.instanceMetadata().hostAddress()),
+                serviceMetadata.additionalMetadata());
     }
 
     private static ServiceInstanceHealthDto translate(ServiceHealth serviceHealth) {
