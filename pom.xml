@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.jon.gille.dropwizard</groupId>
+    <groupId>org.jgille.mumon</groupId>
     <artifactId>dropwizard-monitoring-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -12,8 +12,8 @@
     <modules>
         <module>dropwizard-monitoring</module>
         <module>dropwizard-monitoring-api</module>
-        <module>sample-app</module>
-        <module>monitoring-blackbox-tests</module>
+        <module>dropwizard-sample-app</module>
+        <module>dropwizard-monitoring-blackbox-tests</module>
         <module>sample-monitor</module>
     </modules>
 

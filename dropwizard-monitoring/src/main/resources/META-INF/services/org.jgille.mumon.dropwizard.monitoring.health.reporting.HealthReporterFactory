@@ -1,0 +1,2 @@
+org.jgille.mumon.dropwizard.monitoring.health.reporting.ConsoleHealthReporterFactory
+org.jgille.mumon.dropwizard.monitoring.health.reporting.http.HttpPostHealthReporterFactory
