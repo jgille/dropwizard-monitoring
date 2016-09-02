@@ -125,7 +125,7 @@ monitoringBundle.registerHealthCheck("some_name", new SomeHealthCheck());
 monitoringBundle.registerHealthCheck("some_name", new SomeHealthCheck()
         HealthCheckSettings.withLevel(Level.CRITICAL)
                 .withType("SELF")
-                .withDescription("I will always fail")
+                .withDescription("I check something")
                 .build()));
 ```
 
@@ -134,6 +134,7 @@ monitoringBundle.registerHealthCheck("some_name", new SomeHealthCheck()
 @Settings(
         level = Level.CRITICAL,
         type = "EXTERNAL_DEPENDENCY",
+        description = "I will search for something and expect a result"
         dependentOn = "google"
 )
 public class DummyGoogleHealthCheck extends HealthCheck {
