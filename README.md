@@ -105,7 +105,56 @@ on your health class.
 Usage
 -----
 
-Documentation needed, but have a look in the dropwizard-sample-app module.
+For code examples, have a look in the dropwizard-sample-app module.
+
+// Create the bundle, typically in the constructor of you Application class. We're adding a very simple service metadata provider here
+<pre>
+this.monitoringBundle =
+        new MuMonBundle.Builder<SampleConfiguration>()
+            .addServiceMetadataProvider(c -> Collections.singletonMap("key", "value"))
+            .build();
+</pre>
+
+// Register a health check
+<pre>
+monitoringBundle.registerHealthCheck("some_name", new SomeHealthCheck());
+</pre>
+
+// Register a health check with explicit settings
+<pre>
+monitoringBundle.registerHealthCheck("some_name", new SomeHealthCheck()
+        HealthCheckSettings.withLevel(Level.CRITICAL)
+                .withType("SELF")
+                .withDescription("I will always fail")
+                .build()));
+</pre>
+
+// Using annotation based settings on a HealthCheck class
+<pre>
+@Settings(
+        level = Level.CRITICAL,
+        type = "EXTERNAL_DEPENDENCY",
+        dependentOn = "google"
+)
+public class DummyGoogleHealthCheck extends HealthCheck {
+    @Override
+    protected Result check() throws Exception {
+        return Result.healthy("Search succeeded");
+    }
+}
+</pre>
+
+// Using an annotation to set up caching of a HealthCheck
+<pre>
+@Cached(ttl = 30, unit = TimeUnit.SECONDS)
+public class CachingHealthCheck extends HealthCheck {
+
+    @Override
+    protected Result check() throws Exception {
+        return Result.healthy("I'm cached");
+    }
+}
+</pre>
 
 Building and testing
 --------------------
