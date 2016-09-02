@@ -10,3 +10,8 @@ jdk:
 install:
   - mvn package -Pfatjar
   - ./blackbox.sh verify
+
+notifications:
+  email:
+    recipients:
+      - jon.o.gille@gmail.com
