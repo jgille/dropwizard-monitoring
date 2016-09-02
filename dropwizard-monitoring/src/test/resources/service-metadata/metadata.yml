@@ -1,0 +1,6 @@
+key: Value
+
+map:
+  key: Value
+  message: Hello
+  tags: [1, 2, 3]

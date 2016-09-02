@@ -82,6 +82,9 @@ Example response:
 }
 </pre>
 
+You can add any additional metadata that you want by providing a list of ServiceMetadataProviders when creating the bundle. There is a provider that will read
+metadata from a yaml file and you can easily implement your own.
+
 Reporting service health
 ------------------------
 
