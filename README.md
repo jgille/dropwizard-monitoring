@@ -1,6 +1,8 @@
 µMon Dropwizard
 =====================
 
+[![Build Status](https://travis-ci.org/jgille/dropwizard-monitoring.svg?branch=master)](https://travis-ci.org/jgille/dropwizard-monitoring)
+
 This project contains a Dropwizard bundle that will extend the health checking functionality of Dropwizard. It's written for Dropwizard 1.0.0.
 
 It adds a couple of features:
