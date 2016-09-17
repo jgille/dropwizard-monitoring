@@ -20,7 +20,6 @@ public class HealthCheckResultDto extends Dto {
 
     public final String error;
 
-    @NotBlank
     public final String type;
 
     public final String dependent_on;
